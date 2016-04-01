@@ -28,6 +28,7 @@
             this.AddBTN = new System.Windows.Forms.Button();
             this.RemoveBTN = new System.Windows.Forms.Button();
             this.DragDropLabel = new System.Windows.Forms.Label();
+            this.ClearBTN = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // FilesBox
@@ -41,13 +42,15 @@
             this.FilesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.FilesBox.Size = new System.Drawing.Size(830, 602);
             this.FilesBox.TabIndex = 0;
+            this.FilesBox.SelectedIndexChanged += new System.EventHandler(this.FilesBox_SelectedIndexChanged);
             // 
             // ConvertBTN
             // 
             this.ConvertBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConvertBTN.Enabled = false;
             this.ConvertBTN.Location = new System.Drawing.Point(849, 12);
             this.ConvertBTN.Name = "ConvertBTN";
-            this.ConvertBTN.Size = new System.Drawing.Size(95, 44);
+            this.ConvertBTN.Size = new System.Drawing.Size(95, 45);
             this.ConvertBTN.TabIndex = 1;
             this.ConvertBTN.Text = "Convert";
             this.ConvertBTN.UseVisualStyleBackColor = true;
@@ -56,9 +59,9 @@
             // AddBTN
             // 
             this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddBTN.Location = new System.Drawing.Point(849, 560);
+            this.AddBTN.Location = new System.Drawing.Point(849, 499);
             this.AddBTN.Name = "AddBTN";
-            this.AddBTN.Size = new System.Drawing.Size(95, 25);
+            this.AddBTN.Size = new System.Drawing.Size(95, 35);
             this.AddBTN.TabIndex = 2;
             this.AddBTN.Text = "Add Files";
             this.AddBTN.UseVisualStyleBackColor = true;
@@ -67,9 +70,10 @@
             // RemoveBTN
             // 
             this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.RemoveBTN.Location = new System.Drawing.Point(849, 591);
+            this.RemoveBTN.Enabled = false;
+            this.RemoveBTN.Location = new System.Drawing.Point(849, 540);
             this.RemoveBTN.Name = "RemoveBTN";
-            this.RemoveBTN.Size = new System.Drawing.Size(95, 25);
+            this.RemoveBTN.Size = new System.Drawing.Size(95, 35);
             this.RemoveBTN.TabIndex = 3;
             this.RemoveBTN.Text = "Remove Files";
             this.RemoveBTN.UseVisualStyleBackColor = true;
@@ -90,12 +94,25 @@
             this.DragDropLabel.Text = "Drag and Drop Files";
             this.DragDropLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // ClearBTN
+            // 
+            this.ClearBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ClearBTN.Enabled = false;
+            this.ClearBTN.Location = new System.Drawing.Point(849, 581);
+            this.ClearBTN.Name = "ClearBTN";
+            this.ClearBTN.Size = new System.Drawing.Size(95, 35);
+            this.ClearBTN.TabIndex = 3;
+            this.ClearBTN.Text = "Clear Files";
+            this.ClearBTN.UseVisualStyleBackColor = true;
+            this.ClearBTN.Click += new System.EventHandler(this.ClearBTN_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(956, 626);
             this.Controls.Add(this.DragDropLabel);
+            this.Controls.Add(this.ClearBTN);
             this.Controls.Add(this.RemoveBTN);
             this.Controls.Add(this.AddBTN);
             this.Controls.Add(this.ConvertBTN);
@@ -115,6 +132,7 @@
         private System.Windows.Forms.Button AddBTN;
         private System.Windows.Forms.Button RemoveBTN;
         private System.Windows.Forms.Label DragDropLabel;
+        private System.Windows.Forms.Button ClearBTN;
     }
 }
 
