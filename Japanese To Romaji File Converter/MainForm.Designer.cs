@@ -25,6 +25,8 @@
         private void InitializeComponent() {
             this.FilesBox = new System.Windows.Forms.ListBox();
             this.ConvertBTN = new System.Windows.Forms.Button();
+            this.AddBTN = new System.Windows.Forms.Button();
+            this.RemoveBTN = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // FilesBox
@@ -36,24 +38,49 @@
             this.FilesBox.Location = new System.Drawing.Point(13, 13);
             this.FilesBox.Name = "FilesBox";
             this.FilesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.FilesBox.Size = new System.Drawing.Size(504, 446);
+            this.FilesBox.Size = new System.Drawing.Size(528, 446);
             this.FilesBox.TabIndex = 0;
             // 
             // ConvertBTN
             // 
             this.ConvertBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConvertBTN.Location = new System.Drawing.Point(523, 437);
+            this.ConvertBTN.Location = new System.Drawing.Point(547, 434);
             this.ConvertBTN.Name = "ConvertBTN";
-            this.ConvertBTN.Size = new System.Drawing.Size(75, 23);
+            this.ConvertBTN.Size = new System.Drawing.Size(95, 25);
             this.ConvertBTN.TabIndex = 1;
             this.ConvertBTN.Text = "Convert";
             this.ConvertBTN.UseVisualStyleBackColor = true;
+            this.ConvertBTN.Click += new System.EventHandler(this.ConvertBTN_Click);
+            // 
+            // AddBTN
+            // 
+            this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddBTN.Location = new System.Drawing.Point(547, 12);
+            this.AddBTN.Name = "AddBTN";
+            this.AddBTN.Size = new System.Drawing.Size(95, 25);
+            this.AddBTN.TabIndex = 2;
+            this.AddBTN.Text = "Add Files";
+            this.AddBTN.UseVisualStyleBackColor = true;
+            this.AddBTN.Click += new System.EventHandler(this.AddBTN_Click);
+            // 
+            // RemoveBTN
+            // 
+            this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveBTN.Location = new System.Drawing.Point(547, 43);
+            this.RemoveBTN.Name = "RemoveBTN";
+            this.RemoveBTN.Size = new System.Drawing.Size(95, 25);
+            this.RemoveBTN.TabIndex = 3;
+            this.RemoveBTN.Text = "Remove Files";
+            this.RemoveBTN.UseVisualStyleBackColor = true;
+            this.RemoveBTN.Click += new System.EventHandler(this.RemoveBTN_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(610, 469);
+            this.ClientSize = new System.Drawing.Size(654, 469);
+            this.Controls.Add(this.RemoveBTN);
+            this.Controls.Add(this.AddBTN);
             this.Controls.Add(this.ConvertBTN);
             this.Controls.Add(this.FilesBox);
             this.Name = "MainForm";
@@ -67,6 +94,8 @@
 
         private System.Windows.Forms.ListBox FilesBox;
         private System.Windows.Forms.Button ConvertBTN;
+        private System.Windows.Forms.Button AddBTN;
+        private System.Windows.Forms.Button RemoveBTN;
     }
 }
 
