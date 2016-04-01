@@ -37,6 +37,7 @@ namespace Japanese_To_Romaji_File_Converter {
                 case ProgressUpdate.Completed:
                     this.InvokeSafe(() => {
                         ProgressBox.Text += String.Format("Conversion completed{0}", Environment.NewLine);
+                        CloseBTN.Text = "Close";
                     });
                     break;
 
@@ -45,7 +46,7 @@ namespace Japanese_To_Romaji_File_Converter {
             }
         }
 
-        private void CancelBTN_Click(object sender, EventArgs e) {
+        private void CloseBTN_Click(object sender, EventArgs e) {
             Close();
         }
     }

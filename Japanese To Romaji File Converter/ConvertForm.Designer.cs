@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.ProgressBox = new System.Windows.Forms.RichTextBox();
-            this.CancelBTN = new System.Windows.Forms.Button();
+            this.CloseBTN = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ProgressBox
@@ -39,15 +39,15 @@
             this.ProgressBox.TabIndex = 0;
             this.ProgressBox.Text = "";
             // 
-            // CancelBTN
+            // CloseBTN
             // 
-            this.CancelBTN.Location = new System.Drawing.Point(537, 360);
-            this.CancelBTN.Name = "CancelBTN";
-            this.CancelBTN.Size = new System.Drawing.Size(75, 23);
-            this.CancelBTN.TabIndex = 2;
-            this.CancelBTN.Text = "Cancel";
-            this.CancelBTN.UseVisualStyleBackColor = true;
-            this.CancelBTN.Click += new System.EventHandler(this.CancelBTN_Click);
+            this.CloseBTN.Location = new System.Drawing.Point(537, 360);
+            this.CloseBTN.Name = "CloseBTN";
+            this.CloseBTN.Size = new System.Drawing.Size(75, 23);
+            this.CloseBTN.TabIndex = 2;
+            this.CloseBTN.Text = "Cancel";
+            this.CloseBTN.UseVisualStyleBackColor = true;
+            this.CloseBTN.Click += new System.EventHandler(this.CloseBTN_Click);
             // 
             // ConvertForm
             // 
@@ -55,7 +55,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 392);
             this.ControlBox = false;
-            this.Controls.Add(this.CancelBTN);
+            this.Controls.Add(this.CloseBTN);
             this.Controls.Add(this.ProgressBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "ConvertForm";
@@ -69,6 +69,6 @@
         #endregion
 
         private System.Windows.Forms.RichTextBox ProgressBox;
-        private System.Windows.Forms.Button CancelBTN;
+        private System.Windows.Forms.Button CloseBTN;
     }
 }
