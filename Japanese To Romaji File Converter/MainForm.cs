@@ -78,18 +78,22 @@ namespace Japanese_To_Romaji_File_Converter {
                     // if the item is a directory get the files within the directory 
                     string[] directoryFiles = Directory.GetFiles(item, "*", SearchOption.AllDirectories);
                     foreach (string file in directoryFiles) {
-                        Files.Add(file);
-                        FilesBox.Items.Add(file.Split('\\').Last());
+                        AddFile(file);
                     }
                 } else {
-                    // else add file
-                    Files.Add(item);
-                    FilesBox.Items.Add(item.Split('\\').Last());
+                    AddFile(item);
                 }
             }
 
             // Disable drag drop tip label
             DragDropLabel.Visible = false;
+        }
+
+        private void AddFile(string filePath) {
+            if (File.Exists(filePath) && Files.IndexOf(filePath) == -1) {
+                Files.Add(filePath);
+                FilesBox.Items.Add(filePath.Split('\\').Last());
+            }
         }
 
         public List<string> GetFiles() {
