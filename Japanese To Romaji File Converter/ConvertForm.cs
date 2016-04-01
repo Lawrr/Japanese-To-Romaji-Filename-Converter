@@ -28,13 +28,13 @@ namespace Japanese_To_Romaji_File_Converter {
 
         private void Converter_Progress(object sender, ProgressEventArgs e) {
             switch (e.Type) {
-                case ProgressUpdate.Converted:
+                case ProgressEvent.Converted:
                     this.InvokeSafe(() => {
                         ProgressBox.Text += String.Format("Converted: {0} to {1}{2}", e.OldFileName, e.NewFileName, Environment.NewLine);
                     });
                     break;
 
-                case ProgressUpdate.Completed:
+                case ProgressEvent.Completed:
                     this.InvokeSafe(() => {
                         ProgressBox.Text += String.Format("Conversion completed{0}", Environment.NewLine);
                         CloseBTN.Text = "Done";

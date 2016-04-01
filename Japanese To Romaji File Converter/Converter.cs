@@ -52,8 +52,8 @@ namespace Japanese_To_Romaji_File_Converter {
 
                 // Set new tags
                 tagFile.Tag.Title = title;
-                tagFile.Tag.Performers = performers.Split(sep);
-                tagFile.Tag.AlbumArtists = albumArtists.Split(sep);
+                tagFile.Tag.Performers = performers.Split(sep).Select(item => item.Trim()).ToArray();
+                tagFile.Tag.AlbumArtists = albumArtists.Split(sep).Select(item => item.Trim()).ToArray();
                 tagFile.Tag.Album = album;
                 tagFile.Save();
 
@@ -63,9 +63,9 @@ namespace Japanese_To_Romaji_File_Converter {
                 File.Move(filePath, newFilePath);
 
                 // Update progress
-                OnProgressUpdate(ProgressUpdate.Converted, fileName + extension, newFileName + extension);
+                OnProgressEvent(ProgressEvent.Converted, fileName + extension, newFileName + extension);
             }
-            OnProgressUpdate(ProgressUpdate.Completed);
+            OnProgressEvent(ProgressEvent.Completed);
         }
 
         private string Translate(string inText) {
@@ -138,24 +138,24 @@ namespace Japanese_To_Romaji_File_Converter {
             return unmapText.ToString();
         }
 
-        private void OnProgressUpdate(ProgressUpdate type, string oldFileName = null, string newFileName = null) {
+        private void OnProgressEvent(ProgressEvent type, string oldFileName = null, string newFileName = null) {
             Progress(this, new ProgressEventArgs(type, oldFileName, newFileName));
         }
 
     }
 
-    public enum ProgressUpdate {
+    public enum ProgressEvent {
         Converted,
         Completed
     }
 
     public class ProgressEventArgs : EventArgs {
 
-        public ProgressUpdate Type;
+        public ProgressEvent Type;
         public string OldFileName;
         public string NewFileName;
         
-        public ProgressEventArgs(ProgressUpdate type, string oldFileName = null, string newFileName = null) {
+        public ProgressEventArgs(ProgressEvent type, string oldFileName = null, string newFileName = null) {
             Type = type;
             OldFileName = oldFileName;
             NewFileName = newFileName;
