@@ -65,7 +65,9 @@ namespace Japanese_To_Romaji_File_Converter {
         }
 
         private void FilesBox_SelectedIndexChanged(object sender, EventArgs e) {
-            RemoveBTN.Enabled = true;
+            if (FilesBox.SelectedIndices.Count > 0) {
+                RemoveBTN.Enabled = true;
+            }
         }
 
         private void EmptyFiles() {
