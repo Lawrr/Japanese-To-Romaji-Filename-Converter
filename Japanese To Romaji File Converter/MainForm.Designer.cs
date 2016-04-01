@@ -39,15 +39,15 @@
             this.FilesBox.Location = new System.Drawing.Point(13, 13);
             this.FilesBox.Name = "FilesBox";
             this.FilesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.FilesBox.Size = new System.Drawing.Size(534, 368);
+            this.FilesBox.Size = new System.Drawing.Size(830, 602);
             this.FilesBox.TabIndex = 0;
             // 
             // ConvertBTN
             // 
-            this.ConvertBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConvertBTN.Location = new System.Drawing.Point(553, 361);
+            this.ConvertBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConvertBTN.Location = new System.Drawing.Point(849, 12);
             this.ConvertBTN.Name = "ConvertBTN";
-            this.ConvertBTN.Size = new System.Drawing.Size(95, 25);
+            this.ConvertBTN.Size = new System.Drawing.Size(95, 44);
             this.ConvertBTN.TabIndex = 1;
             this.ConvertBTN.Text = "Convert";
             this.ConvertBTN.UseVisualStyleBackColor = true;
@@ -55,8 +55,8 @@
             // 
             // AddBTN
             // 
-            this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddBTN.Location = new System.Drawing.Point(553, 12);
+            this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddBTN.Location = new System.Drawing.Point(849, 560);
             this.AddBTN.Name = "AddBTN";
             this.AddBTN.Size = new System.Drawing.Size(95, 25);
             this.AddBTN.TabIndex = 2;
@@ -66,8 +66,8 @@
             // 
             // RemoveBTN
             // 
-            this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RemoveBTN.Location = new System.Drawing.Point(553, 43);
+            this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.RemoveBTN.Location = new System.Drawing.Point(849, 591);
             this.RemoveBTN.Name = "RemoveBTN";
             this.RemoveBTN.Size = new System.Drawing.Size(95, 25);
             this.RemoveBTN.TabIndex = 3;
@@ -85,7 +85,7 @@
             this.DragDropLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.DragDropLabel.Location = new System.Drawing.Point(27, 29);
             this.DragDropLabel.Name = "DragDropLabel";
-            this.DragDropLabel.Size = new System.Drawing.Size(506, 337);
+            this.DragDropLabel.Size = new System.Drawing.Size(802, 567);
             this.DragDropLabel.TabIndex = 0;
             this.DragDropLabel.Text = "Drag and Drop Files";
             this.DragDropLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -94,12 +94,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 396);
+            this.ClientSize = new System.Drawing.Size(956, 626);
             this.Controls.Add(this.DragDropLabel);
             this.Controls.Add(this.RemoveBTN);
             this.Controls.Add(this.AddBTN);
             this.Controls.Add(this.ConvertBTN);
             this.Controls.Add(this.FilesBox);
+            this.MinimumSize = new System.Drawing.Size(413, 210);
             this.Name = "MainForm";
             this.Text = "Japanese to Romaji File Converter";
             this.Load += new System.EventHandler(this.MainForm_Load);

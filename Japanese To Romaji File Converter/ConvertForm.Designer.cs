@@ -29,21 +29,26 @@
             // 
             // ProgressBox
             // 
+            this.ProgressBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ProgressBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ProgressBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.ProgressBox.DetectUrls = false;
             this.ProgressBox.Location = new System.Drawing.Point(12, 12);
             this.ProgressBox.Name = "ProgressBox";
             this.ProgressBox.ReadOnly = true;
-            this.ProgressBox.Size = new System.Drawing.Size(600, 342);
+            this.ProgressBox.Size = new System.Drawing.Size(600, 328);
             this.ProgressBox.TabIndex = 0;
             this.ProgressBox.Text = "";
             // 
             // CloseBTN
             // 
-            this.CloseBTN.Location = new System.Drawing.Point(537, 360);
+            this.CloseBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.CloseBTN.Location = new System.Drawing.Point(12, 346);
             this.CloseBTN.Name = "CloseBTN";
-            this.CloseBTN.Size = new System.Drawing.Size(75, 23);
+            this.CloseBTN.Size = new System.Drawing.Size(600, 37);
             this.CloseBTN.TabIndex = 2;
             this.CloseBTN.Text = "Cancel";
             this.CloseBTN.UseVisualStyleBackColor = true;
@@ -58,6 +63,7 @@
             this.Controls.Add(this.CloseBTN);
             this.Controls.Add(this.ProgressBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "ConvertForm";
             this.ShowInTaskbar = false;
             this.Text = "Conversion Progress";
