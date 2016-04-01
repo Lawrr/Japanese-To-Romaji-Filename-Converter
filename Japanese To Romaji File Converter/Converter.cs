@@ -23,8 +23,7 @@ namespace Japanese_To_Romaji_File_Converter {
         }
 
         public void Convert() {
-            string sep = "|";
-            string innerSep = ":";
+            char sep = ':';
 
             foreach (string filePath in Files) {
                 if (!File.Exists(filePath)) {
@@ -40,26 +39,22 @@ namespace Japanese_To_Romaji_File_Converter {
                 // Get tags
                 TagLib.File tagFile = TagLib.File.Create(filePath);
                 string title = tagFile.Tag.Title;
-                string performers = String.Join(innerSep, tagFile.Tag.Performers);
-                string albumArtists = String.Join(innerSep, tagFile.Tag.AlbumArtists);
+                string performers = String.Join(sep.ToString(), tagFile.Tag.Performers);
+                string albumArtists = String.Join(sep.ToString(), tagFile.Tag.AlbumArtists);
                 string album = tagFile.Tag.Album;
 
-                // Translate everything in one request
-                string translateText = fileName + sep + title + sep + performers + sep + albumArtists + sep + album;
-                string translatedText = Translate(translateText);
-
-                // Parse translated text into individual parts
-                string[] translationParts = translatedText.Split(new string[] { sep }, StringSplitOptions.None);
-                string newFileName = translationParts[0].Trim();
-                title = translationParts[1].Trim();
-                performers = translationParts[2].Trim();
-                albumArtists = translationParts[3].Trim();
-                album = translationParts[4].Trim();
+                // Translate
+                string newFileName = Translate(fileName).Trim();
+                title = Translate(title).Trim();
+                performers = Translate(performers).Trim();
+                albumArtists = Translate(albumArtists).Trim();
+                album = Translate(album).Trim();
 
                 // Set new tags
                 tagFile.Tag.Title = title;
-                tagFile.Tag.Performers = performers.Split(new string[] { innerSep }, StringSplitOptions.None);
-                tagFile.Tag.AlbumArtists = albumArtists.Split(new string[] { innerSep }, StringSplitOptions.None);
+                tagFile.Tag.Performers = performers.Split(sep);
+                tagFile.Tag.AlbumArtists = albumArtists.Split(sep);
+                tagFile.Tag.Album = album;
                 tagFile.Save();
 
                 // Move file to new path
@@ -74,6 +69,16 @@ namespace Japanese_To_Romaji_File_Converter {
         }
 
         private string Translate(string inText) {
+            // Check null
+            if (inText == null) {
+                return "";
+            }
+
+            // Check if already translated
+            if (IsAscii(inText)) {
+                return inText;
+            }
+
             // Map english characters to substitutes
             Tuple<string, List<char>> charMap = MapChars(inText);
             inText = charMap.Item1;
