@@ -12,9 +12,9 @@ namespace Japanese_To_Romaji_File_Converter {
         public MainForm() {
             InitializeComponent();
 
-            FilesBox.AllowDrop = true;
-            FilesBox.DragEnter += new DragEventHandler(FilesBox_DragEnter);
-            FilesBox.DragDrop += new DragEventHandler(FilesBox_DragDrop);
+            AllowDrop = true;
+            DragEnter += new DragEventHandler(MainForm_DragEnter);
+            DragDrop += new DragEventHandler(MainForm_DragDrop);
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -28,13 +28,13 @@ namespace Japanese_To_Romaji_File_Converter {
             convertForm.ShowDialog();
         }
 
-        private void FilesBox_DragEnter(object sender, DragEventArgs e) {
+        private void MainForm_DragEnter(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 e.Effect = DragDropEffects.Copy;
             }
         }
 
-        private void FilesBox_DragDrop(object sender, DragEventArgs e) {
+        private void MainForm_DragDrop(object sender, DragEventArgs e) {
             // Get dropped items
             string[] items = (string[])e.Data.GetData(DataFormats.FileDrop);
             AddFiles(items);
@@ -65,6 +65,11 @@ namespace Japanese_To_Romaji_File_Converter {
                 Files.RemoveAt(indices[i]);
                 FilesBox.Items.RemoveAt(indices[i]);
             }
+
+            // Enable drag drop tip label
+            if (FilesBox.Items.Count == 0) {
+                DragDropLabel.Visible = true;
+            }
         }
 
         private void AddFiles(string[] items) {
@@ -82,6 +87,9 @@ namespace Japanese_To_Romaji_File_Converter {
                     FilesBox.Items.Add(item.Split('\\').Last());
                 }
             }
+
+            // Disable drag drop tip label
+            DragDropLabel.Visible = false;
         }
 
         public List<string> GetFiles() {
