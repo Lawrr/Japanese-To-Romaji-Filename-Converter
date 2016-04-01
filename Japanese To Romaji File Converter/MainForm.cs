@@ -60,16 +60,45 @@ namespace Japanese_To_Romaji_File_Converter {
             RemoveFiles(indices);
         }
 
+        private void ClearBTN_Click(object sender, EventArgs e) {
+            ClearFiles();
+        }
+
+        private void FilesBox_SelectedIndexChanged(object sender, EventArgs e) {
+            RemoveBTN.Enabled = true;
+        }
+
+        private void EmptyFiles() {
+            // Toggle when no files
+            ConvertBTN.Enabled = false;
+            RemoveBTN.Enabled = false;
+            ClearBTN.Enabled = false;
+            DragDropLabel.Visible = true;
+        }
+
+        private void HasFiles() {
+            // Toggle when files are added
+            ConvertBTN.Enabled = true;
+            ClearBTN.Enabled = true;
+            DragDropLabel.Visible = false;
+        }
+
+        private void ClearFiles() {
+            Files.Clear();
+            FilesBox.Items.Clear();
+            EmptyFiles();
+        }
+
         private void RemoveFiles(int[] indices) {
             for (int i = indices.Count() - 1; i >= 0; i--) {
                 Files.RemoveAt(indices[i]);
                 FilesBox.Items.RemoveAt(indices[i]);
             }
 
-            // Enable drag drop tip label
             if (FilesBox.Items.Count == 0) {
-                DragDropLabel.Visible = true;
+                EmptyFiles();
             }
+            RemoveBTN.Enabled = false;
         }
 
         private void AddFiles(string[] items) {
@@ -85,8 +114,7 @@ namespace Japanese_To_Romaji_File_Converter {
                 }
             }
 
-            // Disable drag drop tip label
-            DragDropLabel.Visible = false;
+            HasFiles();
         }
 
         private void AddFile(string filePath) {
