@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Japanese To Romaji File Converter", "Japanese To Romaji File Converter\Japanese To Romaji File Converter.csproj", "{3AE55EA6-887D-4AF3-9CD3-141DCFBB9859}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AE55EA6-887D-4AF3-9CD3-141DCFBB9859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE55EA6-887D-4AF3-9CD3-141DCFBB9859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE55EA6-887D-4AF3-9CD3-141DCFBB9859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE55EA6-887D-4AF3-9CD3-141DCFBB9859}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
