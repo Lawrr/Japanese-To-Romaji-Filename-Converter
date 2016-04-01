@@ -70,7 +70,7 @@ namespace Japanese_To_Romaji_File_Converter {
             }
         }
 
-        private void EmptyFiles() {
+        private void OnHasNoFiles() {
             // Toggle when no files
             ConvertBTN.Enabled = false;
             RemoveBTN.Enabled = false;
@@ -78,7 +78,7 @@ namespace Japanese_To_Romaji_File_Converter {
             DragDropLabel.Visible = true;
         }
 
-        private void HasFiles() {
+        private void OnHasFiles() {
             // Toggle when files are added
             ConvertBTN.Enabled = true;
             ClearBTN.Enabled = true;
@@ -88,7 +88,7 @@ namespace Japanese_To_Romaji_File_Converter {
         private void ClearFiles() {
             Files.Clear();
             FilesBox.Items.Clear();
-            EmptyFiles();
+            OnHasNoFiles();
         }
 
         private void RemoveFiles(int[] indices) {
@@ -98,7 +98,7 @@ namespace Japanese_To_Romaji_File_Converter {
             }
 
             if (FilesBox.Items.Count == 0) {
-                EmptyFiles();
+                OnHasNoFiles();
             }
             RemoveBTN.Enabled = false;
         }
@@ -116,7 +116,7 @@ namespace Japanese_To_Romaji_File_Converter {
                 }
             }
 
-            HasFiles();
+            OnHasFiles();
         }
 
         private void AddFile(string filePath) {
