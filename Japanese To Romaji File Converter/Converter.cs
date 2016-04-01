@@ -64,6 +64,7 @@ namespace Japanese_To_Romaji_File_Converter {
 
                 // Move file to new path
                 string newFilePath = directoryPath + Path.DirectorySeparatorChar + newFileName + extension;
+                // TODO exception
                 File.Move(filePath, newFilePath);
 
                 // Update progress
