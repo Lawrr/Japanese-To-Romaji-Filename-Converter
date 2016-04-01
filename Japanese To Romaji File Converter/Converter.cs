@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Japanese_To_Romaji_File_Converter {
     public class Converter {
@@ -75,7 +74,7 @@ namespace Japanese_To_Romaji_File_Converter {
             }
 
             // Check if already translated
-            if (IsAscii(inText)) {
+            if (inText.IsAscii()) {
                 return inText;
             }
 
@@ -94,15 +93,13 @@ namespace Japanese_To_Romaji_File_Converter {
             string outText = src.Split(StartSrcSplit, StringSplitOptions.None).Last()
                                        .Split(EndSrcSplit, StringSplitOptions.None).First();
 
+            // Decode html encodings
+            outText = WebUtility.HtmlDecode(outText);
+
             // Unmap english characters back from substitutes
             outText = UnmapChars(outText, charMap.Item2);
 
             return outText;
-        }
-
-        public static bool IsAscii(string value) {
-            // ASCII encoding replaces non-ascii with question marks, so we use UTF8 to see if multi-byte sequences are there
-            return Encoding.UTF8.GetByteCount(value) == value.Length;
         }
 
         private Tuple<string, List<char>> MapChars(string text) {
@@ -113,7 +110,7 @@ namespace Japanese_To_Romaji_File_Converter {
             // Loop through each character and map english with $MapChar
             for (int i = 0; i < text.Length; i++) {
                 char currChar = text[i];
-                if (IsAscii(currChar.ToString())) {
+                if (currChar.ToString().IsAscii()) {
                     mapChars.Add(currChar);
                     mapText[i] = MapChar;
                 } else if (currChar == MapChar) {
