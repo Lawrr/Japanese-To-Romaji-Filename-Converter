@@ -24,7 +24,7 @@ namespace JapaneseToRomajiFileConverter {
         }
 
         private void ConvertBTN_Click(object sender, EventArgs e) {
-            ConvertForm convertForm = new ConvertForm(this);
+            ConverterForm convertForm = new ConverterForm(this);
             convertForm.ShowDialog();
         }
 

@@ -1,5 +1,5 @@
 ﻿namespace JapaneseToRomajiFileConverter {
-    partial class ConvertForm {
+    partial class ConverterForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -67,7 +67,7 @@
             this.Name = "ConvertForm";
             this.ShowInTaskbar = false;
             this.Text = "Conversion Progress";
-            this.Load += new System.EventHandler(this.ConvertForm_Load);
+            this.Load += new System.EventHandler(this.ConverterForm_Load);
             this.ResumeLayout(false);
 
         }
