@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,6 +17,8 @@ namespace JapaneseToRomajiFileConverter {
             CenterToParent();
             BringToFront();
             Activate();
+
+            ProgressBox.LanguageOption = RichTextBoxLanguageOptions.DualFont;
         }
 
         private async void ConvertFiles(List<string> files) {
@@ -32,13 +35,16 @@ namespace JapaneseToRomajiFileConverter {
             switch (e.Type) {
                 case ProgressEvent.Converted:
                     this.InvokeSafe(() => {
-                        ProgressBox.Text += String.Format("Converted: {0} to {1}{2}", e.OldFileName, e.NewFileName, Environment.NewLine);
+                        ProgressBox.Text += String.Format("Converted: {0} to {1}{2}",
+                                                          e.OldFilePath,
+                                                          Path.GetFileName(e.NewFilePath),
+                                                          Environment.NewLine);
                     });
                     break;
 
                 case ProgressEvent.Completed:
                     this.InvokeSafe(() => {
-                        ProgressBox.Text += String.Format("Conversion completed{0}", Environment.NewLine);
+                        ProgressBox.Text += String.Format("Conversion completed");
                         CloseBTN.Text = "Done";
                     });
                     break;
