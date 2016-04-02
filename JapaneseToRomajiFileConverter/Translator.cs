@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -73,8 +72,8 @@ namespace JapaneseToRomajiFileConverter {
                 }
             }
 
-            // Decode html encoding and trim leading/trailing whitespace
-            outText = WebUtility.HtmlDecode(outText).Trim();
+            // Trim leading/trailing whitespace
+            outText = outText.Trim();
 
             return outText;
         }
