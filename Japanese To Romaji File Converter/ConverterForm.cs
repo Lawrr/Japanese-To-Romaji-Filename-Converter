@@ -4,25 +4,27 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JapaneseToRomajiFileConverter {
-    public partial class ConvertForm : Form {
+    public partial class ConverterForm : Form {
 
-        public ConvertForm(MainForm parentForm) {
+        public ConverterForm(MainForm parentForm) {
             InitializeComponent();
 
             ConvertFiles(parentForm.GetFiles());
         }
 
-        private void ConvertForm_Load(object sender, EventArgs e) {
+        private void ConverterForm_Load(object sender, EventArgs e) {
             CenterToParent();
             BringToFront();
             Activate();
         }
 
         private async void ConvertFiles(List<string> files) {
-            Converter converter = new Converter(files);
-            converter.Progress += new EventHandler<ProgressEventArgs>(Converter_Progress);
+            FileConverter fileConverter = new FileConverter(files);
+            fileConverter.Progress += new EventHandler<ProgressEventArgs>(Converter_Progress);
+
+            // Async convert
             await Task.Factory.StartNew(() => {
-                converter.Convert();
+                fileConverter.Convert();
             });
         }
 

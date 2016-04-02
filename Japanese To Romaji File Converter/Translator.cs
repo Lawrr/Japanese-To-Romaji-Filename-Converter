@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 
 namespace JapaneseToRomajiFileConverter {
-    public class Converter {
+    public class Translator {
 
         public static string[] StartSrcSplit = new string[] { "<div id=src-translit class=translit dir=ltr style=\"text-align:;display:block\">" };
         public static string[] EndSrcSplit = new string[] { "</div>" };
@@ -27,66 +26,7 @@ namespace JapaneseToRomajiFileConverter {
         public static int LatinMin = 0x0000;
         public static int LatinMax = 0x024F;
 
-
-        public event EventHandler<ProgressEventArgs> Progress;
-
-        private List<string> Files;
-
-        public Converter(List<string> files) {
-            Files = files;
-        }
-
-        public void Convert() {
-            char sep = ':';
-
-            foreach (string filePath in Files) {
-                if (!File.Exists(filePath)) {
-                    // TODO Error
-                    continue;
-                }
-
-                // Get file details
-                string directoryPath = Path.GetDirectoryName(filePath);
-                string extension = Path.GetExtension(filePath);
-                string fileName = Path.GetFileNameWithoutExtension(filePath);
-
-                // Get tags
-                TagLib.File tagFile = TagLib.File.Create(filePath);
-                string title = tagFile.Tag.Title;
-                string performers = String.Join(sep.ToString(), tagFile.Tag.Performers);
-                string albumArtists = String.Join(sep.ToString(), tagFile.Tag.AlbumArtists);
-                string album = tagFile.Tag.Album;
-
-                // Translate
-                string newFileName = Translate(fileName).Trim();
-                title = Translate(title).Trim();
-                performers = Translate(performers).Trim();
-                albumArtists = Translate(albumArtists).Trim();
-                album = Translate(album).Trim();
-
-                // Set new tags
-                tagFile.Tag.Title = title;
-                tagFile.Tag.Performers = performers.Split(sep).Select(item => item.Trim()).ToArray();
-                tagFile.Tag.AlbumArtists = albumArtists.Split(sep).Select(item => item.Trim()).ToArray();
-                tagFile.Tag.Album = album;
-                tagFile.Save();
-
-                // Move file to new path
-                string newFilePath = directoryPath + Path.DirectorySeparatorChar + newFileName + extension;
-                // TODO exception
-                File.Move(filePath, newFilePath);
-
-                // Update progress
-                OnProgressEvent(ProgressEvent.Converted, fileName + extension, newFileName + extension);
-            }
-            OnProgressEvent(ProgressEvent.Completed);
-        }
-
-        private static bool IsRomanized(string text) {
-            return text.Where(c => c >= LatinMin && c <= LatinMax).Count() == text.Length;
-        }
-
-        private static string Translate(string inText) {
+        public static string Translate(string inText) {
             // Check null
             if (inText == null) return "";
 
@@ -115,6 +55,10 @@ namespace JapaneseToRomajiFileConverter {
             outText = UnmapChars(outText, charMap.Item2);
 
             return outText;
+        }
+
+        public static bool IsRomanized(string text) {
+            return text.Where(c => c >= LatinMin && c <= LatinMax).Count() == text.Length;
         }
 
         private static Tuple<string, List<char>> MapChars(string text) {
@@ -157,29 +101,5 @@ namespace JapaneseToRomajiFileConverter {
             return unmapText.ToString();
         }
 
-        private void OnProgressEvent(ProgressEvent type, string oldFileName = null, string newFileName = null) {
-            Progress(this, new ProgressEventArgs(type, oldFileName, newFileName));
-        }
-
     }
-
-    public enum ProgressEvent {
-        Converted,
-        Completed
-    }
-
-    public class ProgressEventArgs : EventArgs {
-
-        public ProgressEvent Type;
-        public string OldFileName;
-        public string NewFileName;
-        
-        public ProgressEventArgs(ProgressEvent type, string oldFileName = null, string newFileName = null) {
-            Type = type;
-            OldFileName = oldFileName;
-            NewFileName = newFileName;
-        }
-
-    }
-
 }
