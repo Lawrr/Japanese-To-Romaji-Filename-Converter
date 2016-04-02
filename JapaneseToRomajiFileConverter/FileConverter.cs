@@ -34,15 +34,15 @@ namespace JapaneseToRomajiFileConverter {
                 string[] albumArtists = tagFile.Tag.AlbumArtists;
 
                 // Translate
-                string newFileName = Translator.Translate(fileName).Trim();
-                title = Translator.Translate(title).Trim();
-                album = Translator.Translate(album).Trim();
+                string newFileName = Translator.Translate(fileName);
+                title = Translator.Translate(title);
+                album = Translator.Translate(album);
 
                 for (int i = 0; i < performers.Length; i++) {
-                    performers[i] = Translator.Translate(performers[i]).Trim();
+                    performers[i] = Translator.Translate(performers[i]);
                 }
                 for (int i = 0; i < albumArtists.Length; i++) {
-                    albumArtists[i] = Translator.Translate(albumArtists[i]).Trim();
+                    albumArtists[i] = Translator.Translate(albumArtists[i]);
                 }
 
                 // Set new tags

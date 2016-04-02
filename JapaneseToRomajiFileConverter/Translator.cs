@@ -54,7 +54,7 @@ namespace JapaneseToRomajiFileConverter {
             // Unmap english characters back from substitutes
             outText = UnmapChars(outText, charMap.Item2);
 
-            return outText;
+            return outText.Trim();
         }
 
         public static bool IsRomanized(string text) {
