@@ -1,4 +1,4 @@
-﻿namespace JapaneseToRomajiFileConverter {
+﻿namespace JapaneseToRomajiFileConverter.Converter {
     public class TextSection {
 
         public SectionType Type { get; private set; }
