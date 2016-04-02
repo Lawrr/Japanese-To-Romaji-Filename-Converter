@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace JapaneseToRomajiFileConverter {
     public class FileConverter {
@@ -15,8 +14,7 @@ namespace JapaneseToRomajiFileConverter {
         }
 
         public void Convert() {
-            char sep = ':';
-
+            // Convert each file
             foreach (string filePath in Files) {
                 if (!File.Exists(filePath)) {
                     // TODO Error
@@ -31,22 +29,27 @@ namespace JapaneseToRomajiFileConverter {
                 // Get tags
                 TagLib.File tagFile = TagLib.File.Create(filePath);
                 string title = tagFile.Tag.Title;
-                string performers = String.Join(sep.ToString(), tagFile.Tag.Performers);
-                string albumArtists = String.Join(sep.ToString(), tagFile.Tag.AlbumArtists);
                 string album = tagFile.Tag.Album;
+                string[] performers = tagFile.Tag.Performers;
+                string[] albumArtists = tagFile.Tag.AlbumArtists;
 
                 // Translate
                 string newFileName = Translator.Translate(fileName).Trim();
                 title = Translator.Translate(title).Trim();
-                performers = Translator.Translate(performers).Trim();
-                albumArtists = Translator.Translate(albumArtists).Trim();
                 album = Translator.Translate(album).Trim();
+
+                for (int i = 0; i < performers.Length; i++) {
+                    performers[i] = Translator.Translate(performers[i]).Trim();
+                }
+                for (int i = 0; i < albumArtists.Length; i++) {
+                    albumArtists[i] = Translator.Translate(albumArtists[i]).Trim();
+                }
 
                 // Set new tags
                 tagFile.Tag.Title = title;
-                tagFile.Tag.Performers = performers.Split(sep).Select(item => item.Trim()).ToArray();
-                tagFile.Tag.AlbumArtists = albumArtists.Split(sep).Select(item => item.Trim()).ToArray();
                 tagFile.Tag.Album = album;
+                tagFile.Tag.Performers = performers;
+                tagFile.Tag.AlbumArtists = albumArtists;
                 tagFile.Save();
 
                 // Move file to new path
