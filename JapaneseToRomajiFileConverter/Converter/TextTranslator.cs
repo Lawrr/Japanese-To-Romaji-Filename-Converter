@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace JapaneseToRomajiFileConverter {
-    public class Translator {
+namespace JapaneseToRomajiFileConverter.Converter {
+    public class TextTranslator {
 
         public const string LanguagePair = "ja|en";
 

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using JapaneseToRomajiFileConverter.Converter;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-namespace JapaneseToRomajiFileConverter {
+namespace JapaneseToRomajiFileConverter.Converter {
     public class FileConverter {
 
         public event EventHandler<ProgressEventArgs> Progress;
@@ -44,15 +45,15 @@ namespace JapaneseToRomajiFileConverter {
                 }
 
                 // Translate
-                string newFileName = Translator.Translate(fileName);
-                title = Translator.Translate(title);
-                album = Translator.Translate(album);
+                string newFileName = TextTranslator.Translate(fileName);
+                title = TextTranslator.Translate(title);
+                album = TextTranslator.Translate(album);
 
                 for (int i = 0; i < performers.Length; i++) {
-                    performers[i] = Translator.Translate(performers[i]);
+                    performers[i] = TextTranslator.Translate(performers[i]);
                 }
                 for (int i = 0; i < albumArtists.Length; i++) {
-                    albumArtists[i] = Translator.Translate(albumArtists[i]);
+                    albumArtists[i] = TextTranslator.Translate(albumArtists[i]);
                 }
 
                 // Check if function has been cancelled if called asynchronously
