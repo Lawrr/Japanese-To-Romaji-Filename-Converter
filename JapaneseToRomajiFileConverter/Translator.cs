@@ -7,26 +7,26 @@ using System.Text;
 namespace JapaneseToRomajiFileConverter {
     public class Translator {
 
-        public static string[] StartSrcSplit = new string[] { "<div id=src-translit class=translit dir=ltr style=\"text-align:;display:block\">" };
-        public static string[] EndSrcSplit = new string[] { "</div>" };
-        public static string LanguagePair = "ja|en";
-        public static char MapChar = '`';
+        public const string StartSrcSplit = "<div id=src-translit class=translit dir=ltr style=\"text-align:;display:block\">";
+        public const string EndSrcSplit = "</div>";
+        public const string LanguagePair = "ja|en";
+        public const char MapChar = '`';
 
         // TODO store in better data structure?
         // Unicode ranges for each set
-        public static int RomajiMin = 0x0020;
-        public static int RomajiMax = 0x007E;
-        public static int HiraganaMin = 0x3040;
-        public static int HiraganaMax = 0x309F;
-        public static int KatakanaMin = 0x30A0;
-        public static int KatakanaMax = 0x30FF;
-        public static int KanjiMin = 0x4E00;
-        public static int KanjiMax = 0x9FBF;
+        public const int RomajiMin = 0x0020;
+        public const int RomajiMax = 0x007E;
+        public const int HiraganaMin = 0x3040;
+        public const int HiraganaMax = 0x309F;
+        public const int KatakanaMin = 0x30A0;
+        public const int KatakanaMax = 0x30FF;
+        public const int KanjiMin = 0x4E00;
+        public const int KanjiMax = 0x9FBF;
         // Covers Basic Latin, Latin-1 Supplement, Extended A, Extended B
-        public static int LatinMin = 0x0000;
-        public static int LatinMax = 0x024F;
+        public const int LatinMin = 0x0000;
+        public const int LatinMax = 0x024F;
 
-        public static string Translate(string inText) {
+        public static string Translate(string inText, string languagePair = LanguagePair) {
             // Check null
             if (inText == null) return "";
 
@@ -41,12 +41,12 @@ namespace JapaneseToRomajiFileConverter {
             WebClient webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
             string url = String.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
-                                        inText, LanguagePair);
+                                       inText, LanguagePair);
             string src = webClient.DownloadString(url);
 
             // Get translation from source code between two strings
-            string outText = src.Split(StartSrcSplit, StringSplitOptions.None).Last()
-                                       .Split(EndSrcSplit, StringSplitOptions.None).First();
+            string outText = src.Split(new string[] { StartSrcSplit }, StringSplitOptions.None).Last()
+                                .Split(new string[] { EndSrcSplit }, StringSplitOptions.None).First();
 
             // Decode html encodings
             outText = WebUtility.HtmlDecode(outText);
