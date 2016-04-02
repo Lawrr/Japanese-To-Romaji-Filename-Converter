@@ -122,7 +122,7 @@ namespace JapaneseToRomajiFileConverter {
         private void AddFile(string filePath) {
             if (File.Exists(filePath) && Files.IndexOf(filePath) == -1) {
                 Files.Add(filePath);
-                FilesBox.Items.Add(filePath.Split('\\').Last());
+                FilesBox.Items.Add(filePath);
             }
         }
 

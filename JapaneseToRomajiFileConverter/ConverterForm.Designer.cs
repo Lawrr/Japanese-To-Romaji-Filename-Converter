@@ -35,36 +35,38 @@
             this.ProgressBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ProgressBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.ProgressBox.DetectUrls = false;
+            this.ProgressBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ProgressBox.Location = new System.Drawing.Point(12, 12);
             this.ProgressBox.Name = "ProgressBox";
             this.ProgressBox.ReadOnly = true;
-            this.ProgressBox.Size = new System.Drawing.Size(600, 328);
+            this.ProgressBox.Size = new System.Drawing.Size(720, 327);
             this.ProgressBox.TabIndex = 0;
             this.ProgressBox.Text = "";
+            this.ProgressBox.WordWrap = false;
             // 
             // CloseBTN
             // 
             this.CloseBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.CloseBTN.Location = new System.Drawing.Point(12, 346);
+            this.CloseBTN.Location = new System.Drawing.Point(12, 345);
             this.CloseBTN.Name = "CloseBTN";
-            this.CloseBTN.Size = new System.Drawing.Size(600, 37);
+            this.CloseBTN.Size = new System.Drawing.Size(720, 37);
             this.CloseBTN.TabIndex = 2;
             this.CloseBTN.Text = "Cancel";
             this.CloseBTN.UseVisualStyleBackColor = true;
             this.CloseBTN.Click += new System.EventHandler(this.CloseBTN_Click);
             // 
-            // ConvertForm
+            // ConverterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 392);
+            this.ClientSize = new System.Drawing.Size(744, 391);
             this.ControlBox = false;
             this.Controls.Add(this.CloseBTN);
             this.Controls.Add(this.ProgressBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(400, 200);
-            this.Name = "ConvertForm";
+            this.Name = "ConverterForm";
             this.ShowInTaskbar = false;
             this.Text = "Conversion Progress";
             this.Load += new System.EventHandler(this.ConverterForm_Load);

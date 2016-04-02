@@ -36,11 +36,14 @@
             this.FilesBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.FilesBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FilesBox.FormattingEnabled = true;
+            this.FilesBox.HorizontalScrollbar = true;
+            this.FilesBox.ItemHeight = 18;
             this.FilesBox.Location = new System.Drawing.Point(13, 13);
             this.FilesBox.Name = "FilesBox";
             this.FilesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.FilesBox.Size = new System.Drawing.Size(830, 602);
+            this.FilesBox.Size = new System.Drawing.Size(828, 616);
             this.FilesBox.TabIndex = 0;
             this.FilesBox.SelectedIndexChanged += new System.EventHandler(this.FilesBox_SelectedIndexChanged);
             // 
@@ -48,7 +51,7 @@
             // 
             this.ConvertBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ConvertBTN.Enabled = false;
-            this.ConvertBTN.Location = new System.Drawing.Point(849, 12);
+            this.ConvertBTN.Location = new System.Drawing.Point(847, 12);
             this.ConvertBTN.Name = "ConvertBTN";
             this.ConvertBTN.Size = new System.Drawing.Size(95, 45);
             this.ConvertBTN.TabIndex = 1;
@@ -59,7 +62,7 @@
             // AddBTN
             // 
             this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddBTN.Location = new System.Drawing.Point(849, 499);
+            this.AddBTN.Location = new System.Drawing.Point(847, 513);
             this.AddBTN.Name = "AddBTN";
             this.AddBTN.Size = new System.Drawing.Size(95, 35);
             this.AddBTN.TabIndex = 2;
@@ -71,7 +74,7 @@
             // 
             this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoveBTN.Enabled = false;
-            this.RemoveBTN.Location = new System.Drawing.Point(849, 540);
+            this.RemoveBTN.Location = new System.Drawing.Point(847, 554);
             this.RemoveBTN.Name = "RemoveBTN";
             this.RemoveBTN.Size = new System.Drawing.Size(95, 35);
             this.RemoveBTN.TabIndex = 3;
@@ -89,7 +92,7 @@
             this.DragDropLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.DragDropLabel.Location = new System.Drawing.Point(27, 29);
             this.DragDropLabel.Name = "DragDropLabel";
-            this.DragDropLabel.Size = new System.Drawing.Size(802, 567);
+            this.DragDropLabel.Size = new System.Drawing.Size(800, 585);
             this.DragDropLabel.TabIndex = 0;
             this.DragDropLabel.Text = "Drag and Drop Files";
             this.DragDropLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -98,7 +101,7 @@
             // 
             this.ClearBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ClearBTN.Enabled = false;
-            this.ClearBTN.Location = new System.Drawing.Point(849, 581);
+            this.ClearBTN.Location = new System.Drawing.Point(847, 595);
             this.ClearBTN.Name = "ClearBTN";
             this.ClearBTN.Size = new System.Drawing.Size(95, 35);
             this.ClearBTN.TabIndex = 3;
@@ -110,7 +113,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(956, 626);
+            this.ClientSize = new System.Drawing.Size(954, 644);
             this.Controls.Add(this.DragDropLabel);
             this.Controls.Add(this.ClearBTN);
             this.Controls.Add(this.RemoveBTN);

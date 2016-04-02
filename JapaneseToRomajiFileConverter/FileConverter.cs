@@ -55,13 +55,13 @@ namespace JapaneseToRomajiFileConverter {
                 File.Move(filePath, newFilePath);
 
                 // Update progress
-                OnProgressEvent(ProgressEvent.Converted, fileName + extension, newFileName + extension);
+                OnProgressEvent(ProgressEvent.Converted, filePath, newFilePath);
             }
             OnProgressEvent(ProgressEvent.Completed);
         }
 
-        private void OnProgressEvent(ProgressEvent type, string oldFileName = null, string newFileName = null) {
-            Progress(this, new ProgressEventArgs(type, oldFileName, newFileName));
+        private void OnProgressEvent(ProgressEvent type, string oldFilePath = null, string newFilePath = null) {
+            Progress(this, new ProgressEventArgs(type, oldFilePath, newFilePath));
         }
 
     }
@@ -74,13 +74,13 @@ namespace JapaneseToRomajiFileConverter {
     public class ProgressEventArgs : EventArgs {
 
         public ProgressEvent Type;
-        public string OldFileName;
-        public string NewFileName;
+        public string OldFilePath;
+        public string NewFilePath;
         
-        public ProgressEventArgs(ProgressEvent type, string oldFileName = null, string newFileName = null) {
+        public ProgressEventArgs(ProgressEvent type, string oldFilePath = null, string newFilePath = null) {
             Type = type;
-            OldFileName = oldFileName;
-            NewFileName = newFileName;
+            OldFilePath = oldFilePath;
+            NewFilePath = newFilePath;
         }
 
     }
