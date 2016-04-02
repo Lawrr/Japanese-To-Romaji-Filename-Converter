@@ -69,6 +69,7 @@
             this.Name = "ConverterForm";
             this.ShowInTaskbar = false;
             this.Text = "Conversion Progress";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ConverterForm_FormClosed);
             this.Load += new System.EventHandler(this.ConverterForm_Load);
             this.ResumeLayout(false);
 

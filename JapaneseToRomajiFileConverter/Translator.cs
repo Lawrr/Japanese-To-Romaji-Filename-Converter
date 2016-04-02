@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,10 +8,7 @@ using System.Text;
 namespace JapaneseToRomajiFileConverter {
     public class Translator {
 
-        public const string StartSrcSplit = "<div id=src-translit class=translit dir=ltr style=\"text-align:;display:block\">";
-        public const string EndSrcSplit = "</div>";
         public const string LanguagePair = "ja|en";
-        public const char MapChar = '`';
 
         // TODO store in better data structure?
         // Unicode ranges for each set
@@ -27,75 +25,125 @@ namespace JapaneseToRomajiFileConverter {
         public const int LatinMax = 0x024F;
 
         public static string Translate(string inText, string languagePair = LanguagePair) {
+            // Normalize
+            inText = inText.Normalize(NormalizationForm.FormKC);
+
             // Check if already romanized
             if (IsRomanized(inText)) return inText;
 
-            // Map english characters to substitutes
-            Tuple<string, List<char>> charMap = MapChars(inText);
-            inText = charMap.Item1;
+            // Split the text into separate sequential sections and translate each section
+            // 1. Romanized - Don't translate
+            // 2. Katakana - Translate to output language
+            // 3. Hiragana / Kanji - Translate to phonetic
+            List<TextSection> textSections = GetTextSections(inText);
 
-            // Get translation
             WebClient webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
-            string url = String.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
-                                       inText, LanguagePair);
-            string src = webClient.DownloadString(url);
 
-            // Get translation from source code between two strings
-            string outText = src.Split(new string[] { StartSrcSplit }, StringSplitOptions.None).Last()
-                                .Split(new string[] { EndSrcSplit }, StringSplitOptions.None).First();
+            string outText = "";
 
-            // Decode html encodings
-            outText = WebUtility.HtmlDecode(outText);
+            foreach (TextSection textSection in textSections) {
+                switch (textSection.Type) {
+                    case SectionType.HiraganaKanji: {
+                        // Get phoentic text
+                        string url = string.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
+                                                   textSection.Text, LanguagePair);
+                        HtmlDocument doc = new HtmlWeb().Load(url);
+                        string phoneticText = doc.GetElementbyId("src-translit").InnerText;
+                        outText += phoneticText;
+                        break;
+                    }
 
-            // Unmap english characters back from substitutes
-            outText = UnmapChars(outText, charMap.Item2);
+                    case SectionType.Katakana: {
+                        // Get translated text
+                        string url = string.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
+                                                   textSection.Text, LanguagePair);
+                        HtmlDocument doc = new HtmlWeb().Load(url);
+                        string translatedText = doc.GetElementbyId("result_box").InnerText;
+                        outText += translatedText;
+                        break;
+                    }
 
-            return outText.Trim();
+                    case SectionType.Romanized:
+                    default: {
+                        // Leave as is
+                        outText += textSection.Text;
+                        break;
+                    }
+                }
+            }
+
+            // Decode html encoding and trim leading/trailing whitespace
+            outText = WebUtility.HtmlDecode(outText).Trim();
+
+            return outText;
+        }
+
+        // Loop through characters in a string and split them into sequential sections
+        // eg. "Cake 01. ヴァンパイア雪降る夜"
+        // => ["Cake 01. ", "ヴァンパイア", "雪降る夜"]
+        private static List<TextSection> GetTextSections(string inText) {
+            List<TextSection> textSections = new List<TextSection>();
+
+            SectionType prevSectionType = SectionType.Romanized;
+            SectionType currSectionType = prevSectionType;
+
+            TextSection currSection = new TextSection(currSectionType, "");
+
+            foreach (char c in inText) {
+                string cs = c.ToString();
+
+                if (IsHiragana(cs) || IsKanji(cs)) {
+                    // Hiragana / Kanji
+                    currSectionType = SectionType.HiraganaKanji;
+                } else if (IsKatakana(cs)) {
+                    // Katakana
+                    currSectionType = SectionType.Katakana;
+                } else {
+                    // Romanized or other
+                    currSectionType = SectionType.Romanized;
+                }
+
+                // Check if there is a new section
+                if (prevSectionType == currSectionType) {
+                    // Same section
+                    currSection.Text += cs;
+                } else {
+                    // New section
+                    prevSectionType = currSectionType;
+
+                    // Add section to section list if there is text in it
+                    if (!string.IsNullOrEmpty(currSection.Text)) {
+                        textSections.Add(currSection);
+                    }
+
+                    // Create new section
+                    currSection = new TextSection(currSectionType, cs);
+                }
+            }
+
+            // Add last section to the list
+            if (!string.IsNullOrEmpty(currSection.Text)) {
+                textSections.Add(currSection);
+            }
+
+            return textSections;
         }
 
         public static bool IsRomanized(string text) {
             return text.Where(c => c >= LatinMin && c <= LatinMax).Count() == text.Length;
         }
 
-        private static Tuple<string, List<char>> MapChars(string text) {
-            // Replace characters with sub chars for the translation
-            List<char> mapChars = new List<char>();
-            StringBuilder mapText = new StringBuilder(text);
-
-            // Loop through each character and map english with $MapChar
-            for (int i = 0; i < text.Length; i++) {
-                char currChar = text[i];
-                if (IsRomanized(currChar.ToString())) {
-                    mapChars.Add(currChar);
-                    mapText[i] = MapChar;
-                } else if (currChar == MapChar) {
-                    mapChars.Add(currChar);
-                }
-            }
-
-            Console.WriteLine("Map");
-            Console.WriteLine(text);
-            Console.WriteLine(mapText.ToString());
-
-            return Tuple.Create(mapText.ToString(), mapChars);
+        public static bool IsHiragana(string text) {
+            return text.Where(c => c >= HiraganaMin && c <= HiraganaMax).Count() == text.Length;
         }
 
-        private static string UnmapChars(string text, List<char> mapChars) {
-            StringBuilder unmapText = new StringBuilder(text);
+        public static bool IsKatakana(string text) {
+            return text.Where(c => c >= KatakanaMin && c <= KatakanaMax).Count() == text.Length;
+        }
 
-            // Loop through each character and unmap mapped chars
-            int mapIndex = 0;
-            for (int i = 0; i < text.Length; i++) {
-                if (text[i] == MapChar) {
-                    unmapText[i] = mapChars[mapIndex++];
-                }
-            }
-
-            Console.WriteLine("UnMap");
-            Console.WriteLine(text);
-            Console.WriteLine(unmapText.ToString());
-            return unmapText.ToString();
+        public static bool IsKanji(string text) {
+            return text.Where(c => c >= KanjiMin && c <= KanjiMax).Count() == text.Length;
         }
 
     }
