@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace JapaneseToRomajiFileConverter {
     public class FileConverter {
@@ -14,6 +15,10 @@ namespace JapaneseToRomajiFileConverter {
         }
 
         public void Convert() {
+            Convert(CancellationToken.None);
+        }
+
+        public void Convert(CancellationToken ct) {
             // Convert each file
             foreach (string filePath in Files) {
                 if (!File.Exists(filePath)) {
@@ -33,6 +38,11 @@ namespace JapaneseToRomajiFileConverter {
                 string[] performers = tagFile.Tag.Performers ?? new string[] {};
                 string[] albumArtists = tagFile.Tag.AlbumArtists ?? new string[] {};
 
+                // Check if function has been cancelled if called asynchronously
+                if (ct != CancellationToken.None) {
+                    ct.ThrowIfCancellationRequested();
+                }
+
                 // Translate
                 string newFileName = Translator.Translate(fileName);
                 title = Translator.Translate(title);
@@ -43,6 +53,11 @@ namespace JapaneseToRomajiFileConverter {
                 }
                 for (int i = 0; i < albumArtists.Length; i++) {
                     albumArtists[i] = Translator.Translate(albumArtists[i]);
+                }
+
+                // Check if function has been cancelled if called asynchronously
+                if (ct != CancellationToken.None) {
+                    ct.ThrowIfCancellationRequested();
                 }
 
                 // Set new tags
@@ -56,6 +71,11 @@ namespace JapaneseToRomajiFileConverter {
                 string newFilePath = directoryPath + Path.DirectorySeparatorChar + newFileName + extension;
                 // TODO exception
                 File.Move(filePath, newFilePath);
+
+                // Check if function has been cancelled if called asynchronously
+                if (ct != CancellationToken.None) {
+                    ct.ThrowIfCancellationRequested();
+                }
 
                 // Update progress
                 OnProgressEvent(ProgressEvent.Converted, filePath, newFilePath);

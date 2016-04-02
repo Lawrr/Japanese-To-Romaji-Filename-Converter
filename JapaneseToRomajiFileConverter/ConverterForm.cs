@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JapaneseToRomajiFileConverter {
     public partial class ConverterForm : Form {
 
-        public ConverterForm(MainForm parentForm) {
+        private Task FileConversionTask;
+        private CancellationTokenSource FileConversionTaskCts;
+
+        public ConverterForm(List<string> files) {
             InitializeComponent();
 
-            ConvertFiles(parentForm.GetFiles());
+            ConvertFiles(files);
         }
 
         private void ConverterForm_Load(object sender, EventArgs e) {
@@ -21,14 +25,27 @@ namespace JapaneseToRomajiFileConverter {
             ProgressBox.LanguageOption = RichTextBoxLanguageOptions.DualFont;
         }
 
+        private void ConverterForm_FormClosed(object sender, FormClosedEventArgs e) {
+            // Stop async file conversion task
+            if (FileConversionTaskCts != null) {
+                FileConversionTaskCts.Cancel();
+            }
+        }
+
         private async void ConvertFiles(List<string> files) {
             FileConverter fileConverter = new FileConverter(files);
             fileConverter.Progress += new EventHandler<ProgressEventArgs>(Converter_Progress);
 
-            // Async convert
-            await Task.Factory.StartNew(() => {
-                fileConverter.Convert();
+            // Async file conversion task
+            FileConversionTaskCts = new CancellationTokenSource();
+            FileConversionTask = Task.Factory.StartNew(() => {
+                try {
+                    fileConverter.Convert(FileConversionTaskCts.Token);
+                } catch (OperationCanceledException) {
+                    // Task cancelled
+                }
             });
+            await FileConversionTask;
         }
 
         private void Converter_Progress(object sender, ProgressEventArgs e) {
@@ -57,5 +74,6 @@ namespace JapaneseToRomajiFileConverter {
         private void CloseBTN_Click(object sender, EventArgs e) {
             Close();
         }
+
     }
 }
