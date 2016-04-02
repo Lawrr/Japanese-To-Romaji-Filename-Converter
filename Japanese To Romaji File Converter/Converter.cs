@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace Japanese_To_Romaji_File_Converter {
+namespace JapaneseToRomajiFileConverter {
     public class Converter {
 
         public static string[] StartSrcSplit = new string[] { "<div id=src-translit class=translit dir=ltr style=\"text-align:;display:block\">" };
@@ -118,6 +118,10 @@ namespace Japanese_To_Romaji_File_Converter {
                 }
             }
 
+            Console.WriteLine("Map");
+            Console.WriteLine(text);
+            Console.WriteLine(mapText.ToString());
+
             return Tuple.Create(mapText.ToString(), mapChars);
         }
 
@@ -132,6 +136,9 @@ namespace Japanese_To_Romaji_File_Converter {
                 }
             }
 
+            Console.WriteLine("UnMap");
+            Console.WriteLine(text);
+            Console.WriteLine(unmapText.ToString());
             return unmapText.ToString();
         }
 

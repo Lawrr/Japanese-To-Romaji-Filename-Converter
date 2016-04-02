@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Japanese_To_Romaji_File_Converter {
+namespace JapaneseToRomajiFileConverter {
     public partial class MainForm : Form {
 
         private List<string> Files = new List<string>();

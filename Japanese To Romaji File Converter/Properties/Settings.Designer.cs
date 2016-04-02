@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Japanese_To_Romaji_File_Converter.Properties {
+namespace JapaneseToRomajiFileConverter.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

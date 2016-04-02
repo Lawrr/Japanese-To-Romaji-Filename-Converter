@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows.Forms;
 
-namespace Japanese_To_Romaji_File_Converter {
+namespace JapaneseToRomajiFileConverter {
     public static class Extensions {
 
         /// <summary>
