@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Japanese_To_Romaji_File_Converter {
+namespace JapaneseToRomajiFileConverter {
     public partial class ConvertForm : Form {
 
         public ConvertForm(MainForm parentForm) {

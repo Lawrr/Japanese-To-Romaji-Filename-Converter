@@ -1,4 +1,4 @@
-﻿namespace Japanese_To_Romaji_File_Converter {
+﻿namespace JapaneseToRomajiFileConverter {
     partial class ConvertForm {
         /// <summary>
         /// Required designer variable.
