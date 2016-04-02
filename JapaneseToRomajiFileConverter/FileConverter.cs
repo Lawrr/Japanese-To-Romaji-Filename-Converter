@@ -28,10 +28,10 @@ namespace JapaneseToRomajiFileConverter {
 
                 // Get tags
                 TagLib.File tagFile = TagLib.File.Create(filePath);
-                string title = tagFile.Tag.Title;
-                string album = tagFile.Tag.Album;
-                string[] performers = tagFile.Tag.Performers;
-                string[] albumArtists = tagFile.Tag.AlbumArtists;
+                string title = tagFile.Tag.Title ?? "";
+                string album = tagFile.Tag.Album ?? "";
+                string[] performers = tagFile.Tag.Performers ?? new string[] {};
+                string[] albumArtists = tagFile.Tag.AlbumArtists ?? new string[] {};
 
                 // Translate
                 string newFileName = Translator.Translate(fileName);

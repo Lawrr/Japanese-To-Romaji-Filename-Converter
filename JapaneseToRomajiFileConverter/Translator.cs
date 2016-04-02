@@ -27,9 +27,6 @@ namespace JapaneseToRomajiFileConverter {
         public const int LatinMax = 0x024F;
 
         public static string Translate(string inText, string languagePair = LanguagePair) {
-            // Check null
-            if (inText == null) return "";
-
             // Check if already romanized
             if (IsRomanized(inText)) return inText;
 
