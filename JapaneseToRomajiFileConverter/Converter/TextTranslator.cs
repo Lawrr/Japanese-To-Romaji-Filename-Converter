@@ -1,15 +1,15 @@
-﻿using HtmlAgilityPack;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System;
-using System.Globalization;
+using System.IO;
 
 namespace JapaneseToRomajiFileConverter.Converter {
     public class TextTranslator {
 
         public const string LanguagePair = "ja|en";
+
+        private const string TranslatorUrl = "https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}";
 
         // TODO store in better data structure?
         // Unicode ranges for each set
@@ -25,6 +25,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public const int LatinMin = 0x0000;
         public const int LatinMax = 0x024F;
 
+        public static string GetTranslatorUrl(string text, string languagePair = LanguagePair) {
+            return string.Format(TranslatorUrl, text, languagePair);
+        }
+
         public static string Translate(string inText, string languagePair = LanguagePair) {
             // Normalize
             inText = inText.Normalize(NormalizationForm.FormKC);
@@ -38,50 +42,20 @@ namespace JapaneseToRomajiFileConverter.Converter {
             // 3. Hiragana / Kanji - Translate to phonetic
             List<TextToken> textTokens = GetTextTokens(inText);
 
-            WebClient webClient = new WebClient();
-            webClient.Encoding = Encoding.UTF8;
+            string jaParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.Ja);
+            List<string> jaParticles = new List<string>(File.ReadAllLines(jaParticlesPath));
 
             string outText = "";
-
             foreach (TextToken textToken in textTokens) {
-                switch (textToken.Type) {
-                    case TokenType.HiraganaKanji: {
-                        // Get phoentic text
-                        string url = string.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
-                                                   textToken.Text, LanguagePair);
-                        HtmlDocument doc = new HtmlWeb().Load(url);
-                        string phoneticText = doc.GetElementbyId("src-translit").InnerText;
-
-                        // Add prefix and trim whitespace
-                        outText += textToken.Prefix + phoneticText.Trim();
-                        break;
-                    }
-
-                    case TokenType.Katakana: {
-                        // Get translated text
-                        string url = string.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
-                                                   textToken.Text, LanguagePair);
-                        HtmlDocument doc = new HtmlWeb().Load(url);
-                        string translatedText = doc.GetElementbyId("result_box").InnerText;
-
-                        // Add prefix and trim whitespace
-                        outText += textToken.Prefix + translatedText.Trim();
-                        break;
-                    }
-
-                    case TokenType.Romanized:
-                    default: {
-                        // Add prefix
-                        outText += textToken.Prefix + textToken.Text;
-                        break;
-                    }
-                }
+                textToken.Translate(jaParticles);
+                outText += textToken.Translation;
             }
 
-            // Trim leading/trailing whitespace
-            outText = outText.Trim();
-
             return outText;
+        }
+
+        private static string FormatToken(string v) {
+            throw new NotImplementedException();
         }
 
         public static bool IsTranslated(string text) {
