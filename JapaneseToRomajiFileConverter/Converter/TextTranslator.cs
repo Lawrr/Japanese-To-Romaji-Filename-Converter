@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System;
 using System.IO;
 
 namespace JapaneseToRomajiFileConverter.Converter {
@@ -40,7 +39,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             // 1. Romanized - Don't translate
             // 2. Katakana - Translate to output language
             // 3. Hiragana / Kanji - Translate to phonetic
-            List<TextToken> textTokens = GetTextTokens(inText);
+            List<TextToken> textTokens = TextToken.GetTextTokens(inText);
 
             // Load particle lists
             string jaParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.Ja);
@@ -48,8 +47,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
 
             string outText = "";
             foreach (TextToken textToken in textTokens) {
-                textToken.Translate(jaParticles);
-                outText += textToken.Translation;
+                outText += textToken.Translate(jaParticles);
             }
 
             return outText;
@@ -80,155 +78,6 @@ namespace JapaneseToRomajiFileConverter.Converter {
 
         public static bool IsKanji(string text) {
             return text.Where(c => c >= KanjiMin && c <= KanjiMax).Count() == text.Length;
-        }
-
-        // Loop through characters in a string and split them into sequential tokens
-        // eg. "Cake 01. ヴァンパイア雪降る夜"
-        // => ["Cake 01. ", "ヴァンパイア", "雪降る夜"]
-        private static List<TextToken> GetTextTokens(string inText) {
-            List<TextToken> textTokens = new List<TextToken>();
-
-            // Start with arbitrary token type
-            TokenType prevCharTokenType = TokenType.Romanized;
-            TokenType currCharTokenType = prevCharTokenType;
-
-            TextToken currToken = new TextToken(currCharTokenType);
-
-            foreach (char c in inText) {
-                string cs = c.ToString();
-
-                if (IsHiragana(cs) || IsKanji(cs)) {
-                    // Hiragana / Kanji
-                    currCharTokenType = TokenType.HiraganaKanji;
-                } else if (IsKatakana(cs)) {
-                    // Katakana
-                    currCharTokenType = TokenType.Katakana;
-                } else {
-                    // Romanized or other
-                    currCharTokenType = TokenType.Romanized;
-                }
-
-                // Check if there is a new token
-                if (prevCharTokenType == currCharTokenType) {
-                    // Same token
-                    currToken.Text += cs;
-                } else {
-                    // New token
-
-                    // Modifies the prefix of the token depending on prev/curr tokens
-                    // eg. Add space before curr token
-                    string tokenPrefix = "";
-
-                    if (!string.IsNullOrEmpty(currToken.Text)) {
-                        // Add token to token list if there is text in it
-                        textTokens.Add(currToken);
-
-                        // Get token prefix for new token if previous token was not empty
-                        if (textTokens.Count > 0) {
-                            char prevLastChar = textTokens.Last().Text.Last();
-                            tokenPrefix = GetTokenPrefix(prevCharTokenType,
-                                                             currCharTokenType,
-                                                             prevLastChar, c);
-                        }
-                    }
-
-                    // Create new token
-                    currToken = new TextToken(currCharTokenType, cs, tokenPrefix);
-
-                    prevCharTokenType = currCharTokenType;
-                }
-            }
-
-            // Add last token to the list
-            if (!string.IsNullOrEmpty(currToken.Text)) {
-                textTokens.Add(currToken);
-            }
-
-            return textTokens;
-        }
-
-        private static string GetTokenPrefix(TokenType prevType, TokenType currType,
-                                               char prevLastChar, char currFirstChar) {
-            string prefix = "";
-
-            switch (currType) {
-                // =========================================================================
-                // Current: Romanized
-                // =========================================================================
-                case TokenType.Romanized:
-                    switch (prevType) {
-                        // ==============================
-                        // Previous: HiraganaKanji
-                        // ==============================
-                        case TokenType.HiraganaKanji:
-                            if (!char.IsWhiteSpace(currFirstChar) &&
-                                !char.IsPunctuation(currFirstChar) &&
-                                currFirstChar != '~') {
-                                prefix = " ";
-                            }
-                            break;
-
-                        // ==============================
-                        // Previous: Katakana
-                        // ==============================
-                        case TokenType.Katakana:
-                            if (!char.IsWhiteSpace(currFirstChar) &&
-                                !char.IsPunctuation(currFirstChar)) {
-                                prefix = " ";
-                            }
-                            break;
-                    }
-                    break;
-
-                // =========================================================================
-                // Current: HiraganaKanji
-                // =========================================================================
-                case TokenType.HiraganaKanji:
-                    switch (prevType) {
-                        // ==============================
-                        // Previous: Romanized
-                        // ==============================
-                        case TokenType.Romanized:
-                            if (!char.IsWhiteSpace(prevLastChar) &&
-                                prevLastChar != '~') {
-                                prefix = " ";
-                            }
-                            break;
-
-                        // ==============================
-                        // Previous: Katakana
-                        // ==============================
-                        case TokenType.Katakana:
-                            prefix = " ";
-                            break;
-                    }
-                    break;
-
-                // =========================================================================
-                // Current: Katakana
-                // =========================================================================
-                case TokenType.Katakana:
-                    switch (prevType) {
-                        // ==============================
-                        // Previous: Romanized
-                        // ==============================
-                        case TokenType.Romanized:
-                            if (!char.IsWhiteSpace(prevLastChar)) {
-                                prefix = " ";
-                            }
-                            break;
-
-                        // ==============================
-                        // Previous: HirganaKanji
-                        // ==============================
-                        case TokenType.HiraganaKanji:
-                            prefix = " ";
-                            break;
-                    }
-                    break;
-            }
-
-            return prefix;
         }
 
     }
