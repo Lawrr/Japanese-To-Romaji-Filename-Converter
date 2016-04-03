@@ -26,7 +26,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             List<TextToken> textTokens = new List<TextToken>();
 
             // Start with arbitrary token type
-            TokenType prevCharTokenType = TokenType.Romanized;
+            TokenType prevCharTokenType = TokenType.Latin;
             TokenType currCharTokenType = prevCharTokenType;
 
             TextToken currToken = new TextToken(currCharTokenType);
@@ -41,8 +41,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
                     // Katakana
                     currCharTokenType = TokenType.Katakana;
                 } else {
-                    // Romanized or other
-                    currCharTokenType = TokenType.Romanized;
+                    // Latin or other
+                    currCharTokenType = TokenType.Latin;
                 }
 
                 // Check if there is a new token
@@ -90,9 +90,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
 
             switch (currType) {
                 // =========================================================================
-                // Current: Romanized
+                // Current: Latin
                 // =========================================================================
-                case TokenType.Romanized:
+                case TokenType.Latin:
                     switch (prevType) {
                         // ==============================
                         // Previous: HiraganaKanji
@@ -124,9 +124,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 case TokenType.HiraganaKanji:
                     switch (prevType) {
                         // ==============================
-                        // Previous: Romanized
+                        // Previous: Latin
                         // ==============================
-                        case TokenType.Romanized:
+                        case TokenType.Latin:
                             if (!char.IsWhiteSpace(prevLastChar) &&
                                 prevLastChar != '~' &&
                                 prevLastChar != '-') {
@@ -149,9 +149,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 case TokenType.Katakana:
                     switch (prevType) {
                         // ==============================
-                        // Previous: Romanized
+                        // Previous: Latin
                         // ==============================
-                        case TokenType.Romanized:
+                        case TokenType.Latin:
                             if (!char.IsWhiteSpace(prevLastChar)) {
                                 prefix = " ";
                             }
@@ -188,12 +188,13 @@ namespace JapaneseToRomajiFileConverter.Converter {
                     // Get translated text
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
+                    string phoneticText = doc.GetElementbyId("src-translit").InnerText;
                     string translatedText = doc.GetElementbyId("result_box").InnerText;
                     translation = FormatTranslation(translatedText, particles);
                     break;
                 }
 
-                case TokenType.Romanized:
+                case TokenType.Latin:
                 default: {
                     translation = Prefix + Text;
                     break;
@@ -223,7 +224,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                     outText = Prefix + translatedText.Trim();
                     break;
 
-                case TokenType.Romanized:
+                case TokenType.Latin:
                 default:
                     outText = Prefix + translatedText;
                     break;
@@ -234,7 +235,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
     }
 
     public enum TokenType {
-        Romanized,
+        Latin,
         HiraganaKanji,
         Katakana
     }
