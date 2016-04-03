@@ -3,7 +3,7 @@
 
         public static string DirectoryPath = "res/particles/";
 
-        public static string Ja = "ja_particles.txt";
+        public static string Ja_Latn = "ja-Latn_particles.txt";
 
     }
 }
