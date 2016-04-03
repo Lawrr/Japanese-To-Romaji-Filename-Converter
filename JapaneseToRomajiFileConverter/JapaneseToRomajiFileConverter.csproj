@@ -65,6 +65,7 @@
     <Compile Include="ConverterForm.Designer.cs">
       <DependentUpon>ConverterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Converter\Particles.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -105,6 +106,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="res\particles\ja_particles.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
