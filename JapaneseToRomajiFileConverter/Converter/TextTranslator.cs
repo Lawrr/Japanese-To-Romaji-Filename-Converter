@@ -42,6 +42,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             // 3. Hiragana / Kanji - Translate to phonetic
             List<TextToken> textTokens = GetTextTokens(inText);
 
+            // Load particle lists
             string jaParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.Ja);
             List<string> jaParticles = new List<string>(File.ReadAllLines(jaParticlesPath));
 
@@ -52,10 +53,6 @@ namespace JapaneseToRomajiFileConverter.Converter {
             }
 
             return outText;
-        }
-
-        private static string FormatToken(string v) {
-            throw new NotImplementedException();
         }
 
         public static bool IsTranslated(string text) {
