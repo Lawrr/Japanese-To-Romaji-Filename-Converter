@@ -64,7 +64,6 @@
             this.ControlBox = false;
             this.Controls.Add(this.CloseBTN);
             this.Controls.Add(this.ProgressBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "ConverterForm";
             this.ShowInTaskbar = false;
