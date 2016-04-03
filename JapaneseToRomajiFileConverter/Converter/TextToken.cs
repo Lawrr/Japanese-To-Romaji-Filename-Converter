@@ -100,7 +100,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         case TokenType.HiraganaKanji:
                             if (!char.IsWhiteSpace(currFirstChar) &&
                                 !char.IsPunctuation(currFirstChar) &&
-                                currFirstChar != '~') {
+                                currFirstChar != '~' &&
+                                currFirstChar != '-') {
                                 prefix = " ";
                             }
                             break;
@@ -127,7 +128,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         // ==============================
                         case TokenType.Romanized:
                             if (!char.IsWhiteSpace(prevLastChar) &&
-                                prevLastChar != '~') {
+                                prevLastChar != '~' &&
+                                prevLastChar != '-') {
                                 prefix = " ";
                             }
                             break;
