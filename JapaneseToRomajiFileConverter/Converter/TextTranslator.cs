@@ -29,8 +29,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
             // Normalize
             inText = inText.Normalize(NormalizationForm.FormKC);
 
-            // Check if already romanized
-            if (IsRomanized(inText)) return inText;
+            // Check if already translated / romanized
+            if (IsTranslated(inText)) return inText;
 
             // Split the text into separate sequential tokens and translate each token
             // 1. Romanized - Don't translate
@@ -84,8 +84,19 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return outText;
         }
 
+        public static bool IsTranslated(string text) {
+            return text.Where(c => IsJapanese(c.ToString())).Count() == 0;
+        }
+
         public static bool IsRomanized(string text) {
             return text.Where(c => c >= LatinMin && c <= LatinMax).Count() == text.Length;
+        }
+
+        public static bool IsJapanese(string text) {
+            return text.Where(c => IsHiragana(c.ToString()) ||
+                                   IsKatakana(c.ToString()) ||
+                                   IsKanji(c.ToString())
+                             ).Count() == text.Length;
         }
 
         public static bool IsHiragana(string text) {
