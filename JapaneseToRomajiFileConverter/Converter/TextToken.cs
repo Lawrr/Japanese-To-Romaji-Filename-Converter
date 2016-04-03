@@ -8,6 +8,8 @@ using System.Net;
 namespace JapaneseToRomajiFileConverter.Converter {
     public class TextToken {
 
+        private static char MapSplitChar = ':';
+
         public TokenType Type { get; private set; }
         public string Text { get; set; }
         public string Prefix { get; set; }
@@ -170,8 +172,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return prefix;
         }
 
-
-        public string Translate(List<string> particles, string languagePair = TextTranslator.LanguagePair) {
+        // 1. Latin - Don't translate
+        // 2. Katakana - Translate to output language
+        // 3. Hiragana / Kanji - Translate to phonetic
+        public string Translate(List<string> maps, List<string> particles, string languagePair = TextTranslator.LanguagePair) {
             string translation = "";
 
             switch (Type) {
@@ -180,7 +184,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
                     string phoneticText = doc.GetElementbyId("src-translit").InnerText;
-                    translation = FormatTranslation(phoneticText, particles);
+                    translation = FormatTranslation(phoneticText, maps, particles);
                     break;
                 }
 
@@ -188,9 +192,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
                     // Get translated text
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
-                    string phoneticText = doc.GetElementbyId("src-translit").InnerText;
                     string translatedText = doc.GetElementbyId("result_box").InnerText;
-                    translation = FormatTranslation(translatedText, particles);
+                    translation = FormatTranslation(translatedText, maps, particles);
                     break;
                 }
 
@@ -204,28 +207,44 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return WebUtility.HtmlDecode(translation);
         }
 
-        private string FormatTranslation(string translatedText, List<string> particles) {
-            // Add prefixes, trim whitespace, and capitalise words
+        private string FormatTranslation(string translatedText, List<string> maps, List<string> particles) {
+            // Add prefixes, trim whitespace, and capitalise words, etc.
             string outText = "";
             switch (Type) {
                 case TokenType.HiraganaKanji:
+                    // Maps
+                    foreach (string map in maps) {
+                        string[] mapStrings = map.Split(MapSplitChar);
+                        if (mapStrings.Length != 2) continue;
+
+                        translatedText = Regex.Replace(translatedText,
+                                                       mapStrings[0],
+                                                       mapStrings[1],
+                                                       RegexOptions.IgnoreCase);
+                    }
+                    // Capitalise
                     translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);
+                    // Particles
                     foreach (string particle in particles) {
                         translatedText = Regex.Replace(translatedText,
                                                        @"\b" + particle + @"\b",
                                                        particle,
                                                        RegexOptions.IgnoreCase);
                     }
+                    // Trim and join
                     outText = Prefix + translatedText.Trim();
                     break;
 
                 case TokenType.Katakana:
+                    // Capitalise
                     translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);
+                    // Trim and join
                     outText = Prefix + translatedText.Trim();
                     break;
 
                 case TokenType.Latin:
                 default:
+                    // Join
                     outText = Prefix + translatedText;
                     break;
             }
