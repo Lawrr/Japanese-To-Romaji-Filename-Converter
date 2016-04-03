@@ -32,47 +32,47 @@ namespace JapaneseToRomajiFileConverter.Converter {
             // Check if already romanized
             if (IsRomanized(inText)) return inText;
 
-            // Split the text into separate sequential sections and translate each section
+            // Split the text into separate sequential tokens and translate each token
             // 1. Romanized - Don't translate
             // 2. Katakana - Translate to output language
             // 3. Hiragana / Kanji - Translate to phonetic
-            List<TextSection> textSections = GetTextSections(inText);
+            List<TextToken> textTokens = GetTextTokens(inText);
 
             WebClient webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
 
             string outText = "";
 
-            foreach (TextSection textSection in textSections) {
-                switch (textSection.Type) {
-                    case SectionType.HiraganaKanji: {
+            foreach (TextToken textToken in textTokens) {
+                switch (textToken.Type) {
+                    case TokenType.HiraganaKanji: {
                         // Get phoentic text
                         string url = string.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
-                                                   textSection.Text, LanguagePair);
+                                                   textToken.Text, LanguagePair);
                         HtmlDocument doc = new HtmlWeb().Load(url);
                         string phoneticText = doc.GetElementbyId("src-translit").InnerText;
 
                         // Add prefix and trim whitespace
-                        outText += textSection.Prefix + phoneticText.Trim();
+                        outText += textToken.Prefix + phoneticText.Trim();
                         break;
                     }
 
-                    case SectionType.Katakana: {
+                    case TokenType.Katakana: {
                         // Get translated text
                         string url = string.Format("https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}",
-                                                   textSection.Text, LanguagePair);
+                                                   textToken.Text, LanguagePair);
                         HtmlDocument doc = new HtmlWeb().Load(url);
                         string translatedText = doc.GetElementbyId("result_box").InnerText;
 
                         // Add prefix and trim whitespace
-                        outText += textSection.Prefix + translatedText.Trim();
+                        outText += textToken.Prefix + translatedText.Trim();
                         break;
                     }
 
-                    case SectionType.Romanized:
+                    case TokenType.Romanized:
                     default: {
                         // Add prefix
-                        outText += textSection.Prefix + textSection.Text;
+                        outText += textToken.Prefix + textToken.Text;
                         break;
                     }
                 }
@@ -100,72 +100,72 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return text.Where(c => c >= KanjiMin && c <= KanjiMax).Count() == text.Length;
         }
 
-        // Loop through characters in a string and split them into sequential sections
+        // Loop through characters in a string and split them into sequential tokens
         // eg. "Cake 01. ヴァンパイア雪降る夜"
         // => ["Cake 01. ", "ヴァンパイア", "雪降る夜"]
-        private static List<TextSection> GetTextSections(string inText) {
-            List<TextSection> textSections = new List<TextSection>();
+        private static List<TextToken> GetTextTokens(string inText) {
+            List<TextToken> textTokens = new List<TextToken>();
 
-            // Start with arbitrary section type
-            SectionType prevCharSectionType = SectionType.Romanized;
-            SectionType currCharSectionType = prevCharSectionType;
+            // Start with arbitrary token type
+            TokenType prevCharTokenType = TokenType.Romanized;
+            TokenType currCharTokenType = prevCharTokenType;
 
-            TextSection currSection = new TextSection(currCharSectionType);
+            TextToken currToken = new TextToken(currCharTokenType);
 
             foreach (char c in inText) {
                 string cs = c.ToString();
 
                 if (IsHiragana(cs) || IsKanji(cs)) {
                     // Hiragana / Kanji
-                    currCharSectionType = SectionType.HiraganaKanji;
+                    currCharTokenType = TokenType.HiraganaKanji;
                 } else if (IsKatakana(cs)) {
                     // Katakana
-                    currCharSectionType = SectionType.Katakana;
+                    currCharTokenType = TokenType.Katakana;
                 } else {
                     // Romanized or other
-                    currCharSectionType = SectionType.Romanized;
+                    currCharTokenType = TokenType.Romanized;
                 }
 
-                // Check if there is a new section
-                if (prevCharSectionType == currCharSectionType) {
-                    // Same section
-                    currSection.Text += cs;
+                // Check if there is a new token
+                if (prevCharTokenType == currCharTokenType) {
+                    // Same token
+                    currToken.Text += cs;
                 } else {
-                    // New section
+                    // New token
 
-                    // Modifies the prefix of the section depending on prev/curr sections
-                    // eg. Add space before curr section
-                    string sectionPrefix = "";
+                    // Modifies the prefix of the token depending on prev/curr tokens
+                    // eg. Add space before curr token
+                    string tokenPrefix = "";
 
-                    if (!string.IsNullOrEmpty(currSection.Text)) {
-                        // Add section to section list if there is text in it
-                        textSections.Add(currSection);
+                    if (!string.IsNullOrEmpty(currToken.Text)) {
+                        // Add token to token list if there is text in it
+                        textTokens.Add(currToken);
 
-                        // Get section prefix for new section if previous section was not empty
-                        if (textSections.Count > 0) {
-                            char prevLastChar = textSections.Last().Text.Last();
-                            sectionPrefix = GetSectionPrefix(prevCharSectionType,
-                                                             currCharSectionType,
+                        // Get token prefix for new token if previous token was not empty
+                        if (textTokens.Count > 0) {
+                            char prevLastChar = textTokens.Last().Text.Last();
+                            tokenPrefix = GetTokenPrefix(prevCharTokenType,
+                                                             currCharTokenType,
                                                              prevLastChar, c);
                         }
                     }
 
-                    // Create new section
-                    currSection = new TextSection(currCharSectionType, cs, sectionPrefix);
+                    // Create new token
+                    currToken = new TextToken(currCharTokenType, cs, tokenPrefix);
 
-                    prevCharSectionType = currCharSectionType;
+                    prevCharTokenType = currCharTokenType;
                 }
             }
 
-            // Add last section to the list
-            if (!string.IsNullOrEmpty(currSection.Text)) {
-                textSections.Add(currSection);
+            // Add last token to the list
+            if (!string.IsNullOrEmpty(currToken.Text)) {
+                textTokens.Add(currToken);
             }
 
-            return textSections;
+            return textTokens;
         }
 
-        private static string GetSectionPrefix(SectionType prevType, SectionType currType,
+        private static string GetTokenPrefix(TokenType prevType, TokenType currType,
                                                char prevLastChar, char currFirstChar) {
             string prefix = "";
 
@@ -173,12 +173,12 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 // =========================================================================
                 // Current: Romanized
                 // =========================================================================
-                case SectionType.Romanized:
+                case TokenType.Romanized:
                     switch (prevType) {
                         // ==============================
                         // Previous: HiraganaKanji
                         // ==============================
-                        case SectionType.HiraganaKanji:
+                        case TokenType.HiraganaKanji:
                             if (!char.IsWhiteSpace(currFirstChar) &&
                                 !char.IsPunctuation(currFirstChar) &&
                                 currFirstChar != '~') {
@@ -189,7 +189,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         // ==============================
                         // Previous: Katakana
                         // ==============================
-                        case SectionType.Katakana:
+                        case TokenType.Katakana:
                             if (!char.IsWhiteSpace(currFirstChar) &&
                                 !char.IsPunctuation(currFirstChar)) {
                                 prefix = " ";
@@ -201,12 +201,12 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 // =========================================================================
                 // Current: HiraganaKanji
                 // =========================================================================
-                case SectionType.HiraganaKanji:
+                case TokenType.HiraganaKanji:
                     switch (prevType) {
                         // ==============================
                         // Previous: Romanized
                         // ==============================
-                        case SectionType.Romanized:
+                        case TokenType.Romanized:
                             if (!char.IsWhiteSpace(prevLastChar) &&
                                 prevLastChar != '~') {
                                 prefix = " ";
@@ -216,7 +216,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         // ==============================
                         // Previous: Katakana
                         // ==============================
-                        case SectionType.Katakana:
+                        case TokenType.Katakana:
                             prefix = " ";
                             break;
                     }
@@ -225,12 +225,12 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 // =========================================================================
                 // Current: Katakana
                 // =========================================================================
-                case SectionType.Katakana:
+                case TokenType.Katakana:
                     switch (prevType) {
                         // ==============================
                         // Previous: Romanized
                         // ==============================
-                        case SectionType.Romanized:
+                        case TokenType.Romanized:
                             if (!char.IsWhiteSpace(prevLastChar)) {
                                 prefix = " ";
                             }
@@ -239,7 +239,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         // ==============================
                         // Previous: HirganaKanji
                         // ==============================
-                        case SectionType.HiraganaKanji:
+                        case TokenType.HiraganaKanji:
                             prefix = " ";
                             break;
                     }
