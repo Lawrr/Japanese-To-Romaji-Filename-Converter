@@ -29,6 +29,10 @@
             this.RemoveBTN = new System.Windows.Forms.Button();
             this.DragDropLabel = new System.Windows.Forms.Label();
             this.ClearBTN = new System.Windows.Forms.Button();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.totalFilesLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.selectedFilesLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // FilesBox
@@ -36,14 +40,14 @@
             this.FilesBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.FilesBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FilesBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FilesBox.FormattingEnabled = true;
             this.FilesBox.HorizontalScrollbar = true;
-            this.FilesBox.ItemHeight = 18;
+            this.FilesBox.ItemHeight = 21;
             this.FilesBox.Location = new System.Drawing.Point(13, 13);
             this.FilesBox.Name = "FilesBox";
             this.FilesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.FilesBox.Size = new System.Drawing.Size(828, 616);
+            this.FilesBox.Size = new System.Drawing.Size(828, 529);
             this.FilesBox.TabIndex = 0;
             this.FilesBox.SelectedIndexChanged += new System.EventHandler(this.FilesBox_SelectedIndexChanged);
             // 
@@ -62,7 +66,7 @@
             // AddBTN
             // 
             this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddBTN.Location = new System.Drawing.Point(847, 513);
+            this.AddBTN.Location = new System.Drawing.Point(847, 426);
             this.AddBTN.Name = "AddBTN";
             this.AddBTN.Size = new System.Drawing.Size(95, 35);
             this.AddBTN.TabIndex = 2;
@@ -74,7 +78,7 @@
             // 
             this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoveBTN.Enabled = false;
-            this.RemoveBTN.Location = new System.Drawing.Point(847, 554);
+            this.RemoveBTN.Location = new System.Drawing.Point(847, 467);
             this.RemoveBTN.Name = "RemoveBTN";
             this.RemoveBTN.Size = new System.Drawing.Size(95, 35);
             this.RemoveBTN.TabIndex = 3;
@@ -90,9 +94,9 @@
             this.DragDropLabel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.DragDropLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DragDropLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.DragDropLabel.Location = new System.Drawing.Point(27, 29);
+            this.DragDropLabel.Location = new System.Drawing.Point(36, 37);
             this.DragDropLabel.Name = "DragDropLabel";
-            this.DragDropLabel.Size = new System.Drawing.Size(800, 585);
+            this.DragDropLabel.Size = new System.Drawing.Size(783, 475);
             this.DragDropLabel.TabIndex = 0;
             this.DragDropLabel.Text = "Drag and Drop Files";
             this.DragDropLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -101,7 +105,7 @@
             // 
             this.ClearBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ClearBTN.Enabled = false;
-            this.ClearBTN.Location = new System.Drawing.Point(847, 595);
+            this.ClearBTN.Location = new System.Drawing.Point(847, 508);
             this.ClearBTN.Name = "ClearBTN";
             this.ClearBTN.Size = new System.Drawing.Size(95, 35);
             this.ClearBTN.TabIndex = 3;
@@ -109,22 +113,49 @@
             this.ClearBTN.UseVisualStyleBackColor = true;
             this.ClearBTN.Click += new System.EventHandler(this.ClearBTN_Click);
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.totalFilesLabel,
+            this.selectedFilesLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 560);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(954, 22);
+            this.statusStrip.TabIndex = 4;
+            this.statusStrip.Text = "Status Strip";
+            // 
+            // totalFilesLabel
+            // 
+            this.totalFilesLabel.Name = "totalFilesLabel";
+            this.totalFilesLabel.Size = new System.Drawing.Size(72, 17);
+            this.totalFilesLabel.Text = "Total Files: 0";
+            // 
+            // selectedFilesLabel
+            // 
+            this.selectedFilesLabel.Name = "selectedFilesLabel";
+            this.selectedFilesLabel.Size = new System.Drawing.Size(89, 17);
+            this.selectedFilesLabel.Text = "Selected Files: 0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(954, 644);
+            this.ClientSize = new System.Drawing.Size(954, 582);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.DragDropLabel);
             this.Controls.Add(this.ClearBTN);
             this.Controls.Add(this.RemoveBTN);
             this.Controls.Add(this.AddBTN);
             this.Controls.Add(this.ConvertBTN);
             this.Controls.Add(this.FilesBox);
-            this.MinimumSize = new System.Drawing.Size(413, 210);
+            this.MinimumSize = new System.Drawing.Size(433, 266);
             this.Name = "MainForm";
             this.Text = "Japanese to Romaji File Converter";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -136,6 +167,9 @@
         private System.Windows.Forms.Button RemoveBTN;
         private System.Windows.Forms.Label DragDropLabel;
         private System.Windows.Forms.Button ClearBTN;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel totalFilesLabel;
+        private System.Windows.Forms.ToolStripStatusLabel selectedFilesLabel;
     }
 }
 

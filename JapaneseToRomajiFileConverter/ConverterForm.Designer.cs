@@ -35,7 +35,7 @@
             this.ProgressBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ProgressBox.Cursor = System.Windows.Forms.Cursors.Default;
             this.ProgressBox.DetectUrls = false;
-            this.ProgressBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ProgressBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ProgressBox.Location = new System.Drawing.Point(12, 12);
             this.ProgressBox.Name = "ProgressBox";
             this.ProgressBox.ReadOnly = true;
