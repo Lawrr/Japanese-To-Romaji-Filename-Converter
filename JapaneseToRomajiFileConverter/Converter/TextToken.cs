@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 
 namespace JapaneseToRomajiFileConverter.Converter {
     public class TextToken {
@@ -10,6 +11,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public TokenType Type { get; private set; }
         public string Text { get; set; }
         public string Prefix { get; set; }
+        public object HttpUtility { get; private set; }
 
         public TextToken(TokenType type, string text = "", string prefix = "") {
             Type = type;
@@ -196,7 +198,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 }
             }
 
-            return translation;
+            return WebUtility.HtmlDecode(translation);
         }
 
         private string FormatTranslation(string translatedText, List<string> particles) {
