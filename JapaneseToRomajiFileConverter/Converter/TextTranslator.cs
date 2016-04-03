@@ -36,18 +36,29 @@ namespace JapaneseToRomajiFileConverter.Converter {
             if (IsTranslated(inText)) return inText;
 
             // Split the text into separate sequential tokens and translate each token
-            // 1. Latin - Don't translate
-            // 2. Katakana - Translate to output language
-            // 3. Hiragana / Kanji - Translate to phonetic
             List<TextToken> textTokens = TextToken.GetTextTokens(inText);
 
-            // Load particle lists
-            string jaLatnParticlePath = Path.Combine(Particles.DirectoryPath, Particles.Ja_Latn);
-            List<string> jaLtnParticles = new List<string>(File.ReadAllLines(jaLatnParticlePath));
+            // Load maps and particles lists once
+            string jaLatnMapsPath = Path.Combine(Maps.DirectoryPath, Maps.Ja_Latn);
+            List<string> jaLatnMaps = new List<string>(File.ReadAllLines(jaLatnMapsPath));
 
+            string jaLatnParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.Ja_Latn);
+            List<string> jaLatnParticles = new List<string>(File.ReadAllLines(jaLatnParticlesPath));
+
+            // Translate each token
             string outText = "";
             foreach (TextToken textToken in textTokens) {
-                outText += textToken.Translate(jaLtnParticles);
+                switch (textToken.Type) {
+                    case TokenType.HiraganaKanji:
+                        outText += textToken.Translate(jaLatnMaps, jaLatnParticles);
+                        break;
+
+                    case TokenType.Katakana:
+                    case TokenType.Latin:
+                    default:
+                        outText += textToken.Translate(new List<string>(), new List<string>());
+                        break;
+                }
             }
 
             return outText;
