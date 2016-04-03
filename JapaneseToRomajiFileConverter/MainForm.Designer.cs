@@ -43,11 +43,12 @@
             this.FilesBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FilesBox.FormattingEnabled = true;
             this.FilesBox.HorizontalScrollbar = true;
+            this.FilesBox.IntegralHeight = false;
             this.FilesBox.ItemHeight = 21;
             this.FilesBox.Location = new System.Drawing.Point(13, 13);
             this.FilesBox.Name = "FilesBox";
             this.FilesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.FilesBox.Size = new System.Drawing.Size(828, 529);
+            this.FilesBox.Size = new System.Drawing.Size(828, 532);
             this.FilesBox.TabIndex = 0;
             this.FilesBox.SelectedIndexChanged += new System.EventHandler(this.FilesBox_SelectedIndexChanged);
             // 
@@ -66,7 +67,7 @@
             // AddBTN
             // 
             this.AddBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddBTN.Location = new System.Drawing.Point(847, 426);
+            this.AddBTN.Location = new System.Drawing.Point(847, 429);
             this.AddBTN.Name = "AddBTN";
             this.AddBTN.Size = new System.Drawing.Size(95, 35);
             this.AddBTN.TabIndex = 2;
@@ -78,7 +79,7 @@
             // 
             this.RemoveBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.RemoveBTN.Enabled = false;
-            this.RemoveBTN.Location = new System.Drawing.Point(847, 467);
+            this.RemoveBTN.Location = new System.Drawing.Point(847, 470);
             this.RemoveBTN.Name = "RemoveBTN";
             this.RemoveBTN.Size = new System.Drawing.Size(95, 35);
             this.RemoveBTN.TabIndex = 3;
@@ -96,7 +97,7 @@
             this.DragDropLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.DragDropLabel.Location = new System.Drawing.Point(36, 37);
             this.DragDropLabel.Name = "DragDropLabel";
-            this.DragDropLabel.Size = new System.Drawing.Size(783, 475);
+            this.DragDropLabel.Size = new System.Drawing.Size(783, 471);
             this.DragDropLabel.TabIndex = 0;
             this.DragDropLabel.Text = "Drag and Drop Files";
             this.DragDropLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -105,7 +106,7 @@
             // 
             this.ClearBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ClearBTN.Enabled = false;
-            this.ClearBTN.Location = new System.Drawing.Point(847, 508);
+            this.ClearBTN.Location = new System.Drawing.Point(847, 511);
             this.ClearBTN.Name = "ClearBTN";
             this.ClearBTN.Size = new System.Drawing.Size(95, 35);
             this.ClearBTN.TabIndex = 3;
@@ -118,7 +119,7 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.totalFilesLabel,
             this.selectedFilesLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 560);
+            this.statusStrip.Location = new System.Drawing.Point(0, 556);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(954, 22);
             this.statusStrip.TabIndex = 4;
@@ -140,7 +141,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(954, 582);
+            this.ClientSize = new System.Drawing.Size(954, 578);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.DragDropLabel);
             this.Controls.Add(this.ClearBTN);
