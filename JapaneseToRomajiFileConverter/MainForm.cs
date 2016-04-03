@@ -21,6 +21,9 @@ namespace JapaneseToRomajiFileConverter {
             CenterToScreen();
             BringToFront();
             Activate();
+
+            totalFilesLabel.Text = "Total Files: " + Files.Count;
+            selectedFilesLabel.Text = "Selected Files: " + FilesBox.SelectedIndices.Count;
         }
 
         private void ConvertBTN_Click(object sender, EventArgs e) {
@@ -68,6 +71,7 @@ namespace JapaneseToRomajiFileConverter {
             if (FilesBox.SelectedIndices.Count > 0) {
                 RemoveBTN.Enabled = true;
             }
+            selectedFilesLabel.Text = "Selected Files: " + FilesBox.SelectedIndices.Count;
         }
 
         private void OnHasNoFiles() {
@@ -89,6 +93,9 @@ namespace JapaneseToRomajiFileConverter {
             Files.Clear();
             FilesBox.Items.Clear();
             OnHasNoFiles();
+
+            totalFilesLabel.Text = "Total Files: " + Files.Count;
+            selectedFilesLabel.Text = "Selected Files: " + FilesBox.SelectedIndices.Count;
         }
 
         private void RemoveFiles(int[] indices) {
@@ -100,7 +107,10 @@ namespace JapaneseToRomajiFileConverter {
             if (FilesBox.Items.Count == 0) {
                 OnHasNoFiles();
             }
+            // Disable because index is not selected anymore
             RemoveBTN.Enabled = false;
+
+            totalFilesLabel.Text = "Total Files: " + Files.Count;
         }
 
         private void AddFiles(string[] items) {
@@ -117,6 +127,8 @@ namespace JapaneseToRomajiFileConverter {
             }
 
             OnHasFiles();
+
+            totalFilesLabel.Text = "Total Files: " + Files.Count;
         }
 
         private void AddFile(string filePath) {
