@@ -13,7 +13,6 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public TokenType Type { get; private set; }
         public string Text { get; set; }
         public string Prefix { get; set; }
-        public object HttpUtility { get; private set; }
 
         public TextToken(TokenType type, string text = "", string prefix = "") {
             Type = type;
