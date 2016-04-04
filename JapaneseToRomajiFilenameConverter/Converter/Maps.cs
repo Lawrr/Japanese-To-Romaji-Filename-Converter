@@ -3,7 +3,7 @@
 
         public static string DirectoryPath = "res/maps/";
 
-        public static string Ja_Latn = "ja-Latn_maps.txt";
+        public static string JaLatn = "ja-Latn_maps.txt";
 
     }
 }

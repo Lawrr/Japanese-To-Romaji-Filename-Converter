@@ -39,10 +39,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
             List<TextToken> textTokens = TextToken.GetTextTokens(inText);
 
             // Load maps and particles lists once
-            string jaLatnMapsPath = Path.Combine(Maps.DirectoryPath, Maps.Ja_Latn);
+            string jaLatnMapsPath = Path.Combine(Maps.DirectoryPath, Maps.JaLatn);
             List<string> jaLatnMaps = new List<string>(File.ReadAllLines(jaLatnMapsPath));
 
-            string jaLatnParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.Ja_Latn);
+            string jaLatnParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.JaLatn);
             List<string> jaLatnParticles = new List<string>(File.ReadAllLines(jaLatnParticlesPath));
 
             // Translate each token
