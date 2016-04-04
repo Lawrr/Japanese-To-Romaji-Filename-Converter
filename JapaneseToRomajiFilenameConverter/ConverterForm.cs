@@ -53,16 +53,16 @@ namespace JapaneseToRomajiFileConverter {
             switch (e.Type) {
                 case ProgressEvent.Converted:
                     this.InvokeSafe(() => {
-                        ProgressBox.Text += String.Format("Converted: {0} to {1}{2}",
+                        ProgressBox.AppendText(string.Format("Converted: {0} to {1}{2}",
                                                           e.OldFilePath,
                                                           Path.GetFileName(e.NewFilePath),
-                                                          Environment.NewLine);
+                                                          Environment.NewLine));
                     });
                     break;
 
                 case ProgressEvent.Completed:
                     this.InvokeSafe(() => {
-                        ProgressBox.Text += String.Format("Conversion completed");
+                        ProgressBox.AppendText(string.Format("Conversion completed"));
                         CloseBTN.Text = "Done";
                     });
                     break;
