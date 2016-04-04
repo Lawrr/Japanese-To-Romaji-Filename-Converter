@@ -1,5 +1,4 @@
-﻿using JapaneseToRomajiFileConverter.Converter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -8,6 +7,19 @@ namespace JapaneseToRomajiFileConverter.Converter {
     public class FileConverter {
 
         public event EventHandler<ProgressEventArgs> Progress;
+
+        // Maps illegal filename characters to legal ones
+        public static Dictionary<char, char> IllegalFilenameCharMap { get; private set; } = new Dictionary<char, char>() {
+            { '\\', '＼' },
+            { '/', '／' },
+            { ':', '：' },
+            { '*', '＊' },
+            { '?', '？' },
+            { '"', '”' },
+            { '<', '＜' },
+            { '>', '＞' },
+            { '|', '｜' }
+        };
 
         private List<string> Files;
 
@@ -67,6 +79,14 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 tagFile.Tag.Performers = performers;
                 tagFile.Tag.AlbumArtists = albumArtists;
                 tagFile.Save();
+
+                // Replace illegal filename characters from the new filename
+                foreach (char c in IllegalFilenameCharMap.Keys) {
+                    char cVal;
+                    if (IllegalFilenameCharMap.TryGetValue(c, out cVal)) {
+                        newFileName = newFileName.Replace(c, cVal);
+                    }
+                }
 
                 // Move file to new path
                 string newFilePath = directoryPath + Path.DirectorySeparatorChar + newFileName + extension;
