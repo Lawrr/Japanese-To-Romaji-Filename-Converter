@@ -151,7 +151,7 @@
             this.Controls.Add(this.FilesBox);
             this.MinimumSize = new System.Drawing.Size(433, 266);
             this.Name = "MainForm";
-            this.Text = "Japanese to Romaji File Converter";
+            this.Text = "Japanese to Romaji Filename Converter";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
