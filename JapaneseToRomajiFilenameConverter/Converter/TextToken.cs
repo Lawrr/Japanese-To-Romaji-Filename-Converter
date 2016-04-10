@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System;
 
 namespace JapaneseToRomajiFileConverter.Converter {
     public class TextToken {
@@ -13,6 +14,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public TokenType Type { get; private set; }
         public string Text { get; set; }
         public string Prefix { get; set; }
+
+        public static Dictionary<string, string> PunctuationMap { get; private set; } = new Dictionary<string, string>() {
+            { "、", ", " }
+        };
 
         public TextToken(TokenType type, string text = "", string prefix = "") {
             Type = type;
@@ -198,7 +203,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
 
                 case TokenType.Latin:
                 default: {
-                    translation = Prefix + Text;
+                    translation = FormatTranslation(Text, maps, particles);
                     break;
                 }
             }
@@ -243,6 +248,14 @@ namespace JapaneseToRomajiFileConverter.Converter {
 
                 case TokenType.Latin:
                 default:
+                    // Replace japanese punctuation
+                    foreach (string s in PunctuationMap.Keys) {
+                        string sVal;
+                        if (PunctuationMap.TryGetValue(s, out sVal)) {
+                            translatedText = translatedText.Replace(s, sVal);
+                        }
+                    }
+
                     // Join
                     outText = Prefix + translatedText;
                     break;
