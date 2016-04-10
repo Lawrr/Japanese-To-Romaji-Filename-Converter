@@ -33,6 +33,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             inText = inText.Normalize(NormalizationForm.FormKC);
 
             // Check if already translated / romanized
+            // TODO check japanese punctuation too
             // if (IsTranslated(inText)) return inText;
 
             // Split the text into separate sequential tokens and translate each token
