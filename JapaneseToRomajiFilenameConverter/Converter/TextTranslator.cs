@@ -29,9 +29,6 @@ namespace JapaneseToRomajiFileConverter.Converter {
         }
 
         public static string Translate(string inText, string languagePair = LanguagePair) {
-            // Normalize
-            inText = inText.Normalize(NormalizationForm.FormKC);
-
             // Check if already translated / romanized
             // TODO check japanese punctuation too
             // if (IsTranslated(inText)) return inText;
@@ -61,6 +58,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         break;
                 }
             }
+
+            // Normalize
+            outText = outText.Normalize(NormalizationForm.FormKC);
 
             return outText;
         }
