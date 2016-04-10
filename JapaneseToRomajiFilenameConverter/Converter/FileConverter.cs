@@ -9,16 +9,16 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public event EventHandler<ProgressEventArgs> Progress;
 
         // Maps illegal filename characters to legal ones
-        public static Dictionary<char, char> IllegalFilenameCharMap { get; private set; } = new Dictionary<char, char>() {
-            { '\\', '＼' },
-            { '/', '／' },
-            { ':', '：' },
-            { '*', '＊' },
-            { '?', '？' },
-            { '"', '”' },
-            { '<', '＜' },
-            { '>', '＞' },
-            { '|', '｜' }
+        public static Dictionary<string, string> IllegalFilenameMap { get; private set; } = new Dictionary<string, string>() {
+            { "\\", "＼" },
+            { "/", "／" },
+            { ":", "：" },
+            { "*", "＊" },
+            { "?", "？" },
+            { "\"", "”" },
+            { "<", "＜" },
+            { ">", "＞" },
+            { "|", "｜" }
         };
 
         private List<string> Files;
@@ -81,10 +81,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 tagFile.Save();
 
                 // Replace illegal filename characters from the new filename
-                foreach (char c in IllegalFilenameCharMap.Keys) {
-                    char cVal;
-                    if (IllegalFilenameCharMap.TryGetValue(c, out cVal)) {
-                        newFileName = newFileName.Replace(c, cVal);
+                foreach (string s in IllegalFilenameMap.Keys) {
+                    string sVal;
+                    if (IllegalFilenameMap.TryGetValue(s, out sVal)) {
+                        newFileName = newFileName.Replace(s, sVal);
                     }
                 }
 
