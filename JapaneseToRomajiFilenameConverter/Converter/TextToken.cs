@@ -16,7 +16,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public string Prefix { get; set; }
 
         public static Dictionary<string, string> PunctuationMap { get; private set; } = new Dictionary<string, string>() {
-            { "、", ", " }
+            { "、", ", " },
+            { "“", " \"" },
+            { "”", "\"" }
         };
 
         public TextToken(TokenType type, string text = "", string prefix = "") {
