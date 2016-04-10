@@ -33,7 +33,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             inText = inText.Normalize(NormalizationForm.FormKC);
 
             // Check if already translated / romanized
-            if (IsTranslated(inText)) return inText;
+            // if (IsTranslated(inText)) return inText;
 
             // Split the text into separate sequential tokens and translate each token
             List<TextToken> textTokens = TextToken.GetTextTokens(inText);
