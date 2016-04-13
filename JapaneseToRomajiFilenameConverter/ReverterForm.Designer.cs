@@ -28,9 +28,17 @@
             // 
             // ConversionsBox
             // 
+            this.ConversionsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConversionsBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ConversionsBox.FormattingEnabled = true;
+            this.ConversionsBox.HorizontalScrollbar = true;
+            this.ConversionsBox.IntegralHeight = false;
+            this.ConversionsBox.ItemHeight = 21;
             this.ConversionsBox.Location = new System.Drawing.Point(12, 12);
             this.ConversionsBox.Name = "ConversionsBox";
+            this.ConversionsBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.ConversionsBox.Size = new System.Drawing.Size(744, 459);
             this.ConversionsBox.TabIndex = 0;
             // 
