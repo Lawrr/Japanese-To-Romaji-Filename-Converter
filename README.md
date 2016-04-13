@@ -8,7 +8,7 @@ For audio files it also converts the metadata tags for:
 - Album
 
 ## Runtime Dependencies
-- .NET Framework 4.5.2
+- .NET Framework 4.5
 
 ## Development Dependencies
 - HtmlAgilityPack
