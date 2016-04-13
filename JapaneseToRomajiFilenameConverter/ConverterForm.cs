@@ -9,14 +9,14 @@ using System.Windows.Forms;
 namespace JapaneseToRomajiFileConverter {
     public partial class ConverterForm : Form {
 
-        private Reverter reverter;
+        private Reverter Reverter;
         private Task FileConversionTask;
         private CancellationTokenSource FileConversionTaskCts;
 
         public ConverterForm(List<string> files) {
             InitializeComponent();
 
-            reverter = new Reverter();
+            Reverter = new Reverter();
 
             ConvertFiles(files);
         }
@@ -58,7 +58,7 @@ namespace JapaneseToRomajiFileConverter {
 
                     // Save the conversion if data was changed in the conversion
                     if (!e.Item.OldData.Equals(e.Item.NewData)) {
-                        reverter.SaveConversion(e.Item);
+                        Reverter.SaveConversion(e.Item);
                     }
 
                     this.InvokeSafe(() => {
