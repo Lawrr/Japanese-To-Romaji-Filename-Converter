@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JapaneseToRomajiFileConverter.Converter;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,11 @@ namespace JapaneseToRomajiFileConverter {
         private void ConvertBTN_Click(object sender, EventArgs e) {
             ConverterForm convertForm = new ConverterForm(Files);
             convertForm.ShowDialog();
+        }
+
+        private void HistoryBTN_Click(object sender, EventArgs e) {
+            Reverter reverter = new Reverter();
+            reverter.DumpHistory();
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e) {

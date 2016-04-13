@@ -32,6 +32,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.totalFilesLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.selectedFilesLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.HistoryBTN = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -137,6 +138,17 @@
             this.selectedFilesLabel.Size = new System.Drawing.Size(89, 17);
             this.selectedFilesLabel.Text = "Selected Files: 0";
             // 
+            // HistoryBTN
+            // 
+            this.HistoryBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.HistoryBTN.Location = new System.Drawing.Point(847, 63);
+            this.HistoryBTN.Name = "HistoryBTN";
+            this.HistoryBTN.Size = new System.Drawing.Size(95, 45);
+            this.HistoryBTN.TabIndex = 1;
+            this.HistoryBTN.Text = "View Conversion History";
+            this.HistoryBTN.UseVisualStyleBackColor = true;
+            this.HistoryBTN.Click += new System.EventHandler(this.HistoryBTN_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,6 +159,7 @@
             this.Controls.Add(this.ClearBTN);
             this.Controls.Add(this.RemoveBTN);
             this.Controls.Add(this.AddBTN);
+            this.Controls.Add(this.HistoryBTN);
             this.Controls.Add(this.ConvertBTN);
             this.Controls.Add(this.FilesBox);
             this.MinimumSize = new System.Drawing.Size(433, 266);
@@ -171,6 +184,7 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel totalFilesLabel;
         private System.Windows.Forms.ToolStripStatusLabel selectedFilesLabel;
+        private System.Windows.Forms.Button HistoryBTN;
     }
 }
 

@@ -9,11 +9,14 @@ using System.Windows.Forms;
 namespace JapaneseToRomajiFileConverter {
     public partial class ConverterForm : Form {
 
+        private Reverter reverter;
         private Task FileConversionTask;
         private CancellationTokenSource FileConversionTaskCts;
 
         public ConverterForm(List<string> files) {
             InitializeComponent();
+
+            reverter = new Reverter();
 
             ConvertFiles(files);
         }
@@ -52,17 +55,23 @@ namespace JapaneseToRomajiFileConverter {
         private void Converter_Progress(object sender, ProgressEventArgs e) {
             switch (e.Type) {
                 case ProgressEvent.Converted:
+
+                    // Save the conversion if data was changed in the conversion
+                    if (!e.Item.OldData.Equals(e.Item.NewData)) {
+                        reverter.SaveConversion(e.Item);
+                    }
+
                     this.InvokeSafe(() => {
                         ProgressBox.AppendText(string.Format("Converted: {0} to {1}{2}",
-                                                          e.OldFilePath,
-                                                          Path.GetFileName(e.NewFilePath),
-                                                          Environment.NewLine));
+                                                             e.Item.OldData.FilePath,
+                                                             Path.GetFileName(e.Item.NewData.FilePath),
+                                                             Environment.NewLine));
                     });
                     break;
 
                 case ProgressEvent.Completed:
                     this.InvokeSafe(() => {
-                        ProgressBox.AppendText(string.Format("Conversion completed"));
+                        ProgressBox.AppendText("Conversion completed");
                         CloseBTN.Text = "Done";
                     });
                     break;
