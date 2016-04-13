@@ -58,6 +58,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\ConversionData.cs" />
+    <Compile Include="Converter\ConversionItem.cs" />
     <Compile Include="Converter\FileConverter.cs" />
     <Compile Include="ConverterForm.cs">
       <SubType>Form</SubType>
@@ -67,6 +69,7 @@
     </Compile>
     <Compile Include="Converter\Maps.cs" />
     <Compile Include="Converter\Particles.cs" />
+    <Compile Include="Converter\Reverter.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -51,6 +51,13 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 string[] performers = tagFile.Tag.Performers ?? new string[] {};
                 string[] albumArtists = tagFile.Tag.AlbumArtists ?? new string[] {};
 
+                // Store old conversion data
+                ConversionData oldData = new ConversionData(filePath,
+                                                            title,
+                                                            album,
+                                                            performers,
+                                                            albumArtists);
+
                 // Check if function has been cancelled if called asynchronously
                 if (ct != CancellationToken.None) {
                     ct.ThrowIfCancellationRequested();
@@ -93,19 +100,27 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 // TODO exception
                 File.Move(filePath, newFilePath);
 
+                // Store new conversion data
+                ConversionData newData = new ConversionData(newFilePath,
+                                                            title,
+                                                            album,
+                                                            performers,
+                                                            albumArtists);
+
                 // Check if function has been cancelled if called asynchronously
                 if (ct != CancellationToken.None) {
                     ct.ThrowIfCancellationRequested();
                 }
 
                 // Update progress
-                OnProgressEvent(ProgressEvent.Converted, filePath, newFilePath);
+                ConversionItem conversionItem = new ConversionItem(oldData, newData);
+                OnProgressEvent(ProgressEvent.Converted, conversionItem);
             }
             OnProgressEvent(ProgressEvent.Completed);
         }
 
-        private void OnProgressEvent(ProgressEvent type, string oldFilePath = null, string newFilePath = null) {
-            Progress(this, new ProgressEventArgs(type, oldFilePath, newFilePath));
+        private void OnProgressEvent(ProgressEvent type, ConversionItem item = null) {
+            Progress(this, new ProgressEventArgs(type, item));
         }
 
     }
@@ -118,13 +133,11 @@ namespace JapaneseToRomajiFileConverter.Converter {
     public class ProgressEventArgs : EventArgs {
 
         public ProgressEvent Type;
-        public string OldFilePath;
-        public string NewFilePath;
+        public ConversionItem Item;
         
-        public ProgressEventArgs(ProgressEvent type, string oldFilePath = null, string newFilePath = null) {
+        public ProgressEventArgs(ProgressEvent type, ConversionItem item) {
             Type = type;
-            OldFilePath = oldFilePath;
-            NewFilePath = newFilePath;
+            Item = item;
         }
 
     }
