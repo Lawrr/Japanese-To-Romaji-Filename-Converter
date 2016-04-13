@@ -33,8 +33,8 @@ namespace JapaneseToRomajiFileConverter {
         }
 
         private void HistoryBTN_Click(object sender, EventArgs e) {
-            Reverter reverter = new Reverter();
-            reverter.DumpHistory();
+            ReverterForm reverterForm = new ReverterForm();
+            reverterForm.ShowDialog();
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e) {

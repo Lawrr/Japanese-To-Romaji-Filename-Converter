@@ -1,15 +1,15 @@
-﻿using System;
+﻿namespace JapaneseToRomajiFileConverter.Converter {
 
-namespace JapaneseToRomajiFileConverter.Converter {
-
-    [Serializable]
     public class ConversionData {
 
-        public string FilePath { get; private set; }
-        public string Title { get; private set; }
-        public string Album { get; private set; }
-        public string[] Performers { get; private set; }
-        public string[] AlbumArtists { get; private set; }
+        public string FilePath { get; set; }
+        public string Title { get; set; }
+        public string Album { get; set; }
+        public string[] Performers { get; set; }
+        public string[] AlbumArtists { get; set; }
+
+        public ConversionData() {
+        }
 
         public ConversionData(string filePath,
                               string title,
