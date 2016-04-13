@@ -1,12 +1,11 @@
-﻿using System;
+﻿using System.IO;
 
 namespace JapaneseToRomajiFileConverter.Converter {
 
-    [Serializable]
     public class ConversionItem {
 
-        public ConversionData OldData { get; private set; }
-        public ConversionData NewData { get; private set; }
+        public ConversionData OldData { get; }
+        public ConversionData NewData { get; }
 
         public ConversionItem(ConversionData oldData, ConversionData newData) {
             OldData = oldData;
@@ -14,7 +13,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
         }
 
         public override string ToString() {
-            return OldData.FilePath + " - " + NewData.FilePath;
+            return NewData.FilePath + " - " + Path.GetFileName(OldData.FilePath);
         }
 
     }
