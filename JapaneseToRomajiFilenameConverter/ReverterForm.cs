@@ -20,7 +20,14 @@ namespace JapaneseToRomajiFileConverter {
             foreach (ConversionItem item in items) {
                 ConversionsBox.Items.Add(item);
             }
-        } 
+        }
+
+        private void RevertBTN_Click(object sender, System.EventArgs e) {
+            int[] indices = new int[ConversionsBox.SelectedIndices.Count];
+            for (int i = ConversionsBox.SelectedIndices.Count - 1; i >= 0; i--) {
+                indices[i] = ConversionsBox.SelectedIndices[i];
+            }
+        }
 
     }
 }
