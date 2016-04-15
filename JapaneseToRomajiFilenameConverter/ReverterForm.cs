@@ -5,14 +5,12 @@ using JapaneseToRomajiFileConverter.Converter;
 namespace JapaneseToRomajiFileConverter {
     public partial class ReverterForm : Form {
 
-        private Reverter Reverter;
         private List<ConversionItem> ConversionItems;
 
         public ReverterForm() {
             InitializeComponent();
 
-            Reverter = new Reverter();
-            ConversionItems = Reverter.GetConversions();
+            ConversionItems = HistoryManager.GetConversions();
             AddConversions(ConversionItems);
         }
 

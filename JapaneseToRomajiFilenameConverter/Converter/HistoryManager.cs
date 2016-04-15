@@ -7,13 +7,13 @@ using System.Xml;
 using System.Xml.Linq;
 
 namespace JapaneseToRomajiFileConverter.Converter {
-    public class Reverter {
+    public class HistoryManager {
 
         public const string DefaultDataFilePath = "conversion-history.xml";
 
         private string DataFilePath;
 
-        public Reverter(string dataFilePath = DefaultDataFilePath) {
+        public HistoryManager(string dataFilePath = DefaultDataFilePath) {
             DataFilePath = dataFilePath;
         }
 
@@ -58,17 +58,17 @@ namespace JapaneseToRomajiFileConverter.Converter {
             writer.WriteEndElement();
         }
 
-        public List<ConversionItem> GetConversions() {
+        public static List<ConversionItem> GetConversions(string dataFilePath = DefaultDataFilePath) {
             List<ConversionItem> items = new List<ConversionItem>();
 
-            if (!File.Exists(DataFilePath)) return items;
+            if (!File.Exists(dataFilePath)) return items;
 
             XmlReaderSettings readerSettings = new XmlReaderSettings {
                 ConformanceLevel = ConformanceLevel.Auto,
                 IgnoreWhitespace = true
             };
 
-            using (StreamReader stream = new StreamReader(DataFilePath, Encoding.UTF8)) {
+            using (StreamReader stream = new StreamReader(dataFilePath, Encoding.UTF8)) {
                 using (XmlReader reader = XmlReader.Create(stream, readerSettings)) {
                     reader.MoveToContent();
                     while (!reader.EOF) {
@@ -86,7 +86,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return items;
         }
 
-        private ConversionItem ParseConversionItem(XElement element) {
+        private static ConversionItem ParseConversionItem(XElement element) {
             ConversionData oldData = new ConversionData();
             ConversionData newData = new ConversionData();
 
