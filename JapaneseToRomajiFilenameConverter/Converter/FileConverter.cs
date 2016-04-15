@@ -9,7 +9,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public event EventHandler<ProgressEventArgs> Progress;
 
         // Maps illegal filename characters to legal ones
-        public static Dictionary<string, string> IllegalFilenameMap { get; private set; } = new Dictionary<string, string>() {
+        public static Dictionary<string, string> IllegalFilenameMap { get; } = new Dictionary<string, string>() {
             { "\\", "＼" },
             { "/", "／" },
             { ":", "：" },

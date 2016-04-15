@@ -1,14 +1,10 @@
-﻿using JapaneseToRomajiFileConverter.Converter;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace JapaneseToRomajiFileConverter {
     public partial class MainForm : Form {
-
-        private List<string> Files = new List<string>();
 
         public MainForm() {
             InitializeComponent();
@@ -23,12 +19,12 @@ namespace JapaneseToRomajiFileConverter {
             BringToFront();
             Activate();
 
-            totalFilesLabel.Text = "Total Files: " + Files.Count;
+            totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
             selectedFilesLabel.Text = "Selected Files: " + FilesBox.SelectedIndices.Count;
         }
 
         private void ConvertBTN_Click(object sender, EventArgs e) {
-            ConverterForm convertForm = new ConverterForm(Files);
+            ConverterForm convertForm = new ConverterForm(FilesBox.Items.Cast<string>().ToList());
             convertForm.ShowDialog();
         }
 
@@ -96,17 +92,15 @@ namespace JapaneseToRomajiFileConverter {
         }
 
         private void ClearFiles() {
-            Files.Clear();
             FilesBox.Items.Clear();
             OnHasNoFiles();
 
-            totalFilesLabel.Text = "Total Files: " + Files.Count;
+            totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
             selectedFilesLabel.Text = "Selected Files: " + FilesBox.SelectedIndices.Count;
         }
 
         private void RemoveFiles(int[] indices) {
             for (int i = indices.Count() - 1; i >= 0; i--) {
-                Files.RemoveAt(indices[i]);
                 FilesBox.Items.RemoveAt(indices[i]);
             }
 
@@ -116,7 +110,7 @@ namespace JapaneseToRomajiFileConverter {
             // Disable because index is not selected anymore
             RemoveBTN.Enabled = false;
 
-            totalFilesLabel.Text = "Total Files: " + Files.Count;
+            totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
         }
 
         private void AddFiles(string[] items) {
@@ -134,12 +128,11 @@ namespace JapaneseToRomajiFileConverter {
 
             OnHasFiles();
 
-            totalFilesLabel.Text = "Total Files: " + Files.Count;
+            totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
         }
 
         private void AddFile(string filePath) {
-            if (File.Exists(filePath) && Files.IndexOf(filePath) == -1) {
-                Files.Add(filePath);
+            if (File.Exists(filePath) && FilesBox.Items.IndexOf(filePath) == -1) {
                 FilesBox.Items.Add(filePath);
             }
         }
