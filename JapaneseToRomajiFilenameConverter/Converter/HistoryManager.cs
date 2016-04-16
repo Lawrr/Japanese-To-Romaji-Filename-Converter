@@ -9,40 +9,44 @@ using System.Xml.Linq;
 namespace JapaneseToRomajiFileConverter.Converter {
     public class HistoryManager {
 
-        public const string DefaultDataFilePath = "conversion-history.xml";
+        public const string DefaultFilePath = "conversion-history.xml";
 
-        private string DataFilePath;
+        private string FilePath;
 
-        public HistoryManager(string dataFilePath = DefaultDataFilePath) {
-            DataFilePath = dataFilePath;
+        public HistoryManager(string filePath = DefaultFilePath) {
+            FilePath = filePath;
         }
 
         public void SaveConversion(ConversionItem item) {
-            using (Stream stream = File.Open(DataFilePath, FileMode.Append)) {
-                using (XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8)) {
-                    writer.Formatting = Formatting.Indented;
-                    writer.Indentation = 4;
-
-                    // Start item
-                    writer.WriteStartElement("ConversionItem");
-
-                    // New file path
-                    writer.WriteElementString("Path", item.NewData.FilePath);
-
-                    // Old data
-                    writer.WriteStartElement("Data");
-                    WriteConversionData(writer, item.OldData);
-                    writer.WriteEndElement();
-
-                    // End item
-                    writer.WriteEndElement();
-
-                    writer.WriteWhitespace(Environment.NewLine);
-                }
+            // Get xml file or create root element if the file does not exist/cannot load
+            XDocument doc;
+            try {
+                doc = XDocument.Load(FilePath);
+            } catch (XmlException) {
+                doc = new XDocument();
+                doc.Add(new XElement("Conversions"));
+                doc.Save(FilePath);
             }
+
+            // Get root element and add new conversion
+            XElement root = doc.Root;
+            XElement itemElement = new XElement("Item");
+            using (XmlWriter writer = itemElement.CreateWriter()) {
+                // New file path
+                writer.WriteElementString("Path", item.NewData.FilePath);
+
+                // Old data
+                writer.WriteStartElement("Data");
+                WriteConversionData(writer, item.OldData);
+                writer.WriteEndElement();
+            }
+
+            // Add and save new item
+            root.Add(itemElement);
+            root.Save(FilePath);
         }
 
-        private void WriteConversionData(XmlTextWriter writer, ConversionData data) {
+        private void WriteConversionData(XmlWriter writer, ConversionData data) {
             writer.WriteElementString("Path", data.FilePath);
             writer.WriteElementString("Title", data.Title);
             writer.WriteElementString("Album", data.Album);
@@ -59,10 +63,16 @@ namespace JapaneseToRomajiFileConverter.Converter {
         }
 
         public void RemoveConversion(ConversionItem item) {
-            
+            XDocument doc = XDocument.Load(FilePath);
+            IEnumerable<XElement> query = from node in doc.Descendants("Item")
+                                          let path = node.Descendants("Path").First()
+                                          where path != null && path.Value.Equals(item.NewData.FilePath)
+                                          select node;
+            query.ToList().ForEach(n => n.Remove());
+            doc.Save(FilePath);
         }
 
-        public static List<ConversionItem> GetConversions(string dataFilePath = DefaultDataFilePath) {
+        public static List<ConversionItem> GetConversions(string dataFilePath = DefaultFilePath) {
             List<ConversionItem> items = new List<ConversionItem>();
 
             if (!File.Exists(dataFilePath)) return items;
@@ -76,7 +86,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 using (XmlReader reader = XmlReader.Create(stream, readerSettings)) {
                     reader.MoveToContent();
                     while (!reader.EOF) {
-                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "ConversionItem") {
+                        if (reader.NodeType == XmlNodeType.Element && reader.Name == "Item") {
                             XElement element = (XElement) XNode.ReadFrom(reader);
                             ConversionItem item = ParseConversionItem(element);
                             items.Add(item);
