@@ -42,9 +42,11 @@
             this.ConversionsBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.ConversionsBox.Size = new System.Drawing.Size(749, 459);
             this.ConversionsBox.TabIndex = 0;
+            this.ConversionsBox.SelectedIndexChanged += new System.EventHandler(this.ConversionsBox_SelectedIndexChanged);
             // 
             // RevertBTN
             // 
+            this.RevertBTN.Enabled = false;
             this.RevertBTN.Location = new System.Drawing.Point(767, 12);
             this.RevertBTN.Name = "RevertBTN";
             this.RevertBTN.Size = new System.Drawing.Size(95, 45);

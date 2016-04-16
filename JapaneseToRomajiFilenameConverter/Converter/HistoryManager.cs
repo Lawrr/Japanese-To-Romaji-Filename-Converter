@@ -58,6 +58,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
             writer.WriteEndElement();
         }
 
+        public void RemoveConversion(ConversionItem item) {
+            
+        }
+
         public static List<ConversionItem> GetConversions(string dataFilePath = DefaultDataFilePath) {
             List<ConversionItem> items = new List<ConversionItem>();
 

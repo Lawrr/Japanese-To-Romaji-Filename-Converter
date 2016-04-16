@@ -21,19 +21,16 @@ namespace JapaneseToRomajiFileConverter.Converter {
             { "|", "｜" }
         };
 
-        private List<string> Files;
-
-        public FileConverter(List<string> files) {
-            Files = files;
+        public FileConverter() {
         }
 
-        public void Convert() {
-            Convert(CancellationToken.None);
+        public void Convert(List<string> files) {
+            Convert(files, CancellationToken.None);
         }
 
-        public void Convert(CancellationToken ct) {
+        public void Convert(List<string> files, CancellationToken ct) {
             // Convert each file
-            foreach (string filePath in Files) {
+            foreach (string filePath in files) {
                 if (!File.Exists(filePath)) {
                     // TODO Error
                     continue;
@@ -119,14 +116,46 @@ namespace JapaneseToRomajiFileConverter.Converter {
             OnProgressEvent(ProgressEvent.Completed);
         }
 
-        private void OnProgressEvent(ProgressEvent type, ConversionItem item = null) {
-            Progress(this, new ProgressEventArgs(type, item));
+        public void Revert(List<ConversionItem> fileItems) {
+            Revert(fileItems, CancellationToken.None);
         }
 
+        public void Revert(List<ConversionItem> fileItems, CancellationToken ct) {
+            foreach (ConversionItem item in fileItems) {
+                if (!File.Exists(item.NewData.FilePath)) {
+                    // TODO Error
+                    continue;
+                }
+
+                // Check if function has been cancelled if called asynchronously
+                if (ct != CancellationToken.None) {
+                    ct.ThrowIfCancellationRequested();
+                }
+
+                // Revert tags
+                TagLib.File tagFile = TagLib.File.Create(item.NewData.FilePath);
+                tagFile.Tag.Title = item.OldData.Title;
+                tagFile.Tag.Album = item.OldData.Album;
+                tagFile.Tag.Performers = item.OldData.Performers;
+                tagFile.Tag.AlbumArtists = item.OldData.AlbumArtists;
+                tagFile.Save();
+
+                // Revert filename
+                File.Move(item.NewData.FilePath, item.OldData.FilePath);
+
+                OnProgressEvent(ProgressEvent.Reverted, item);
+            }
+            OnProgressEvent(ProgressEvent.Completed);
+        }
+
+        private void OnProgressEvent(ProgressEvent type, ConversionItem item = null) {
+            Progress?.Invoke(this, new ProgressEventArgs(type, item));
+        }
     }
 
     public enum ProgressEvent {
         Converted,
+        Reverted,
         Completed
     }
 
