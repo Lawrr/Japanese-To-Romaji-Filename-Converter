@@ -15,4 +15,4 @@ For audio files it also converts the metadata tags for:
 - TagLib
 
 ## Disclaimer
-Please be aware that the software is not perfect and may make incorrect translations. There is currently no way to revert conversions so please use at your own risk.
+Please be aware that the software is not perfect and may make incorrect translations. Please use at your own risk.
