@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using JapaneseToRomajiFileConverter.Converter;
 
@@ -21,9 +23,27 @@ namespace JapaneseToRomajiFileConverter {
         }
 
         private void RevertBTN_Click(object sender, System.EventArgs e) {
-            int[] indices = new int[ConversionsBox.SelectedIndices.Count];
-            for (int i = ConversionsBox.SelectedIndices.Count - 1; i >= 0; i--) {
-                indices[i] = ConversionsBox.SelectedIndices[i];
+            ConverterForm convertForm = new ConverterForm();
+            convertForm.Progress += new EventHandler<ProgressEventArgs>(Revert_Progress);
+            convertForm.RevertFiles(ConversionsBox.SelectedItems.Cast<ConversionItem>().ToList());
+            convertForm.ShowDialog();
+        }
+
+        private void ConversionsBox_SelectedIndexChanged(object sender, EventArgs e) {
+            if (ConversionsBox.SelectedIndices.Count > 0) {
+                RevertBTN.Enabled = true;
+            } else {
+                RevertBTN.Enabled = false;
+            }
+        }
+
+        private void Revert_Progress(object sender, ProgressEventArgs e) {
+            switch (e.Type) {
+                case ProgressEvent.Reverted:
+                    this.InvokeSafe(() => {
+                        ConversionsBox.Items.Remove(e.Item);
+                    });
+                    break;
             }
         }
 

@@ -69,7 +69,7 @@
     </Compile>
     <Compile Include="Converter\Maps.cs" />
     <Compile Include="Converter\Particles.cs" />
-    <Compile Include="Converter\Reverter.cs" />
+    <Compile Include="Converter\HistoryManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
