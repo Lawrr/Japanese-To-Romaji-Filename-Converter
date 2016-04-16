@@ -16,6 +16,12 @@ namespace JapaneseToRomajiFileConverter {
             AddConversions(ConversionItems);
         }
 
+        private void ReverterForm_Load(object sender, EventArgs e) {
+            CenterToParent();
+            BringToFront();
+            Activate();
+        }
+
         private void AddConversions(List<ConversionItem> items) {
             foreach (ConversionItem item in items) {
                 ConversionsBox.Items.Add(item);

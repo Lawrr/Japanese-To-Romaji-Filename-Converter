@@ -64,6 +64,7 @@
             this.Controls.Add(this.ConversionsBox);
             this.Name = "ReverterForm";
             this.Text = "Conversion Reverter";
+            this.Load += new System.EventHandler(this.ReverterForm_Load);
             this.ResumeLayout(false);
 
         }
