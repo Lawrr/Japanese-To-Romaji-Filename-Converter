@@ -52,8 +52,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 ConversionData oldData = new ConversionData(filePath,
                                                             title,
                                                             album,
-                                                            performers,
-                                                            albumArtists);
+                                                            // Ensure values remain the same even if array is modified
+                                                            (string[])performers.Clone(),
+                                                            (string[])albumArtists.Clone());
 
                 // Check if function has been cancelled if called asynchronously
                 if (ct != CancellationToken.None) {
@@ -101,8 +102,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
                 ConversionData newData = new ConversionData(newFilePath,
                                                             title,
                                                             album,
-                                                            performers,
-                                                            albumArtists);
+                                                            // Ensure values remain the same even if array is modified
+                                                            (string[])performers.Clone(),
+                                                            (string[])albumArtists.Clone());
 
                 // Check if function has been cancelled if called asynchronously
                 if (ct != CancellationToken.None) {
