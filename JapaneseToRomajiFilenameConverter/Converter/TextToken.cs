@@ -227,6 +227,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
 
                     // Capitalise
                     translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);
+
+                    // Decapitalise particles
+                    translatedText = TextTranslator.LowercaseParticles(translatedText, particles);
                     
                     // Trim and join
                     outText = Prefix + translatedText.Trim();
