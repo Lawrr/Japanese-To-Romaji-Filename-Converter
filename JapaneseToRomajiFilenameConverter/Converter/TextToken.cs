@@ -1,6 +1,4 @@
-﻿using System;
-using HtmlAgilityPack;
-using System.Text.RegularExpressions;
+﻿using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,8 +6,6 @@ using System.Net;
 
 namespace JapaneseToRomajiFileConverter.Converter {
     public class TextToken {
-
-        private static char MapSplitChar = ':';
 
         public TokenType Type { get; private set; }
         public string Text { get; set; }
@@ -42,7 +38,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
             foreach (char c in inText) {
                 string cs = c.ToString();
 
-                if (TextTranslator.IsHiragana(cs) || TextTranslator.IsKanji(cs)) {
+                if (TextTranslator.IsProlongedChar(c)) {
+                    // Special condition for prolonged sound character
+                    currCharTokenType = prevCharTokenType;
+                } else if (TextTranslator.IsHiragana(cs) || TextTranslator.IsKanji(cs)) {
                     // Hiragana / Kanji
                     currCharTokenType = TokenType.HiraganaKanji;
                 } else if (TextTranslator.IsKatakana(cs)) {
@@ -222,49 +221,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
             string outText = "";
             switch (Type) {
                 case TokenType.HiraganaKanji:
-                    // Maps
-                    if (maps != null) {
-                        foreach (string map in maps) {
-                            string[] mapStrings = map.Split(MapSplitChar);
-                            if (mapStrings.Length != 2) continue;
-
-                            translatedText = Regex.Replace(translatedText,
-                                mapStrings[0],
-                                mapStrings[1],
-                                RegexOptions.IgnoreCase);
-                        }
-                    }
-
-                    // Capitalise
-                    translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);
-
-                    // Particles
-                    if (particles != null) {
-                        foreach (string particle in particles) {
-                            translatedText = Regex.Replace(translatedText,
-                                @"\b" + particle + @"\b",
-                                particle,
-                                RegexOptions.IgnoreCase);
-                        }
-                    }
-
-                    // Trim and join
-                    outText = Prefix + translatedText.Trim();
-                    break;
-
                 case TokenType.Katakana:
                     // Maps
-                    if (maps != null) {
-                        foreach (string map in maps) {
-                            string[] mapStrings = map.Split(MapSplitChar);
-                            if (mapStrings.Length != 2) continue;
-
-                            translatedText = Regex.Replace(translatedText,
-                                mapStrings[0],
-                                mapStrings[1],
-                                RegexOptions.IgnoreCase);
-                        }
-                    }
+                    translatedText = TextTranslator.MapPhrases(translatedText, maps);
 
                     // Capitalise
                     translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);

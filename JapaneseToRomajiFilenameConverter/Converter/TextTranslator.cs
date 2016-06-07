@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace JapaneseToRomajiFileConverter.Converter {
     public class TextTranslator {
@@ -10,6 +10,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public const string LanguagePair = "ja|en";
 
         private const string TranslatorUrl = "https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}";
+
+        private static char MapSplitChar = ':';
 
         // TODO store in better data structure?
         // Unicode ranges for each set
@@ -19,6 +21,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
         public const int HiraganaMax = 0x309F;
         public const int KatakanaMin = 0x30A0;
         public const int KatakanaMax = 0x30FF;
+        // ー character present in both hiragana and katakana
+        public const int HirakataProlongedChar = 0x30FC;
         public const int KanjiMin = 0x4E00;
         public const int KanjiMax = 0x9FBF;
         // Covers Basic Latin, Latin-1 Supplement, Extended A, Extended B
@@ -72,31 +76,65 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return outText;
         }
 
+        public static string MapPhrases(string text, List<string> maps) {
+            if (maps != null) {
+                foreach (string map in maps) {
+                    string[] mapStrings = map.Split(MapSplitChar);
+
+                    // Make sure mapping is valid
+                    if (map.IndexOf(MapSplitChar) == 0 || (mapStrings.Length != 1 && mapStrings.Length != 2)) continue;
+
+                    text = Regex.Replace(text,
+                        mapStrings[0],
+                        mapStrings[1],
+                        RegexOptions.IgnoreCase);
+                }
+            }
+
+            return text;
+        }
+
+        public static string LowercaseParticles(string text, List<string> particles) {
+            if (particles != null) {
+                foreach (string particle in particles) {
+                    text = Regex.Replace(text,
+                        @"\b" + particle + @"\b",
+                        particle,
+                        RegexOptions.IgnoreCase);
+                }
+            }
+
+            return text;
+        }
+
         public static bool IsTranslated(string text) {
-            return text.Where(c => IsJapanese(c.ToString())).Count() == 0;
+            return !text.Any(c => IsJapanese(c.ToString()));
         }
 
         public static bool IsLatin(string text) {
-            return text.Where(c => c >= LatinMin && c <= LatinMax).Count() == text.Length;
+            return text.Count(c => c >= LatinMin && c <= LatinMax) == text.Length;
         }
 
         public static bool IsJapanese(string text) {
-            return text.Where(c => IsHiragana(c.ToString()) ||
+            return text.Count(c => IsHiragana(c.ToString()) ||
                                    IsKatakana(c.ToString()) ||
-                                   IsKanji(c.ToString())
-                             ).Count() == text.Length;
+                                   IsKanji(c.ToString())) == text.Length;
         }
 
         public static bool IsHiragana(string text) {
-            return text.Where(c => c >= HiraganaMin && c <= HiraganaMax).Count() == text.Length;
+            return text.Count(c => (c >= HiraganaMin && c <= HiraganaMax) || c == HirakataProlongedChar) == text.Length;
         }
 
         public static bool IsKatakana(string text) {
-            return text.Where(c => c >= KatakanaMin && c <= KatakanaMax).Count() == text.Length;
+            return text.Count(c => (c >= KatakanaMin && c <= KatakanaMax) || c == HirakataProlongedChar) == text.Length;
         }
 
         public static bool IsKanji(string text) {
-            return text.Where(c => c >= KanjiMin && c <= KanjiMax).Count() == text.Length;
+            return text.Count(c => c >= KanjiMin && c <= KanjiMax) == text.Length;
+        }
+
+        public static bool IsProlongedChar(char c) {
+            return c == HirakataProlongedChar;
         }
 
     }
