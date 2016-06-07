@@ -13,6 +13,9 @@ For audio files it also converts the metadata tags for:
 - Convert files from japanese to romaji (including metadata)
 - Revert files (and metadata) back to their original names after a conversion
 
+## Usage
+Note: Please unzip the folder before using it so that the conversion-history file can be written to permanently.
+
 ## Runtime Dependencies
 - .NET Framework 4.5
 
