@@ -32,7 +32,7 @@ Note: Please unzip the folder before using it so that the conversion-history fil
 2. Select files which you want converted back
 3. Click `Revert Selected`
 
-## Things to Know
+## Things To Know
 ### Conversion History
 Whenever a conversion occurs, the conversion is saved in the `conversion-history.xml` file in the same directory as the program. The conversion data is saved in this file in case a file has to be reverted back.
 
