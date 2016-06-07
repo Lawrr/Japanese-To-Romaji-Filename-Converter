@@ -80,7 +80,7 @@ namespace JapaneseToRomajiFileConverter {
 
                     this.InvokeSafe(() => {
                         ProgressBox.AppendText(string.Format("Converted: {0} to {1}{2}",
-                                                             e.Item.OldData.FilePath,
+                                                             Path.GetFileName(e.Item.OldData.FilePath),
                                                              Path.GetFileName(e.Item.NewData.FilePath),
                                                              Environment.NewLine));
                     });
@@ -92,7 +92,7 @@ namespace JapaneseToRomajiFileConverter {
 
                     this.InvokeSafe(() => {
                         ProgressBox.AppendText(string.Format("Reverted: {0} to {1}{2}",
-                                                             e.Item.NewData.FilePath,
+                                                             Path.GetFileName(e.Item.NewData.FilePath),
                                                              Path.GetFileName(e.Item.OldData.FilePath),
                                                              Environment.NewLine));
                     });
