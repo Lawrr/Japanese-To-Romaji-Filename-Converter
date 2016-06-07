@@ -9,6 +9,10 @@ For audio files it also converts the metadata tags for:
 - Album artists
 - Album
 
+## Current Features
+- Convert files from japanese to romaji (including metadata)
+- Revert files (and metadata) back to their original names after a conversion
+
 ## Runtime Dependencies
 - .NET Framework 4.5
 
