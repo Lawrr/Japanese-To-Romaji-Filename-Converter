@@ -51,6 +51,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
             string kataMapPath = Path.Combine(Maps.DirectoryPath, Maps.KataLatn);
             List<string> kataMaps = new List<string>(File.ReadAllLines(kataMapPath));
 
+            string kataParticlesPath = Path.Combine(Maps.DirectoryPath, Particles.KataLatn);
+            List<string> kataParticles = new List<string>(File.ReadAllLines(kataParticlesPath));
+
             // Translate each token
             string outText = "";
             foreach (TextToken textToken in textTokens) {
@@ -60,7 +63,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         break;
 
                     case TokenType.Katakana:
-                        outText += textToken.Translate(kataMaps);
+                        outText += textToken.Translate(kataMaps, kataParticles);
                         break;
 
                     case TokenType.Latin:
