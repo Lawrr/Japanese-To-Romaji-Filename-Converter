@@ -37,7 +37,7 @@ Note: Please unzip the folder before using it so that the conversion-history fil
 Whenever a conversion occurs, the conversion is saved in the `conversion-history.xml` file in the same directory as the program. The conversion data is saved in this file in case a file has to be reverted back.
 
 ### Mappings
-To ease the problem of incorrect translations, there are mapping files located in `res/maps/` which will map the specified phrases into another phrase. For example, if the phrase `tsu` continuously gets translated into `tsud`, you can map create a new mapping `tsud:tsu` which will map `tsud` to `tsu` whenever a translation occurs.
+To ease the problem of incorrect translations, there are mapping files located in `res/maps/` which will map the specified phrases into another phrase. For example, if the phrase `tsu` continuously gets translated into `tsud`, you can create a new mapping `tsud:tsu` which will map `tsud` to `tsu` whenever a translation occurs.
 
 Currently there are two mapping files:
 - `hirakanji-latn_maps.txt`: Used whenever a token is translated from hiragana/kanji to romaji
