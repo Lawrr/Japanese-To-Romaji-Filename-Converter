@@ -46,6 +46,7 @@
             // 
             // RevertBTN
             // 
+            this.RevertBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.RevertBTN.Enabled = false;
             this.RevertBTN.Location = new System.Drawing.Point(767, 12);
             this.RevertBTN.Name = "RevertBTN";
@@ -62,6 +63,7 @@
             this.ClientSize = new System.Drawing.Size(874, 484);
             this.Controls.Add(this.RevertBTN);
             this.Controls.Add(this.ConversionsBox);
+            this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "ReverterForm";
             this.Text = "Conversion Reverter";
             this.Load += new System.EventHandler(this.ReverterForm_Load);
