@@ -1,6 +1,8 @@
 # Japanese to Romaji Filename Converter
 Works for any file with a japanese name (hiragana/kanji/katakana). Converts the filename into romaji with the help of Google Translator.
 
+Note: This overrides the selected files with the new converted filenames.
+
 For audio files it also converts the metadata tags for:
 - Title
 - Contributing artists
