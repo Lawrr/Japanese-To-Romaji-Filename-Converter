@@ -71,8 +71,8 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         if (textTokens.Count > 0) {
                             char prevLastChar = textTokens.Last().Text.Last();
                             tokenPrefix = GetTokenPrefix(prevCharTokenType,
-                                                             currCharTokenType,
-                                                             prevLastChar, c);
+                                                         currCharTokenType,
+                                                         prevLastChar, c);
                         }
                     }
 
@@ -106,7 +106,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         // ==============================
                         case TokenType.HiraganaKanji:
                             if (!char.IsWhiteSpace(currFirstChar) &&
-                                !char.IsPunctuation(currFirstChar) &&
+                                (!char.IsPunctuation(currFirstChar) || currFirstChar == '&') &&
                                 currFirstChar != '~' &&
                                 currFirstChar != '-') {
                                 prefix = " ";
@@ -118,7 +118,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
                         // ==============================
                         case TokenType.Katakana:
                             if (!char.IsWhiteSpace(currFirstChar) &&
-                                !char.IsPunctuation(currFirstChar)) {
+                                (!char.IsPunctuation(currFirstChar) || currFirstChar == '&')) {
                                 prefix = " ";
                             }
                             break;
