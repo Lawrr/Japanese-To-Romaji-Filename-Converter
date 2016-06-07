@@ -44,7 +44,11 @@ Currently there are two mapping files:
 - `kata-latn_maps.txt`: Used whenever a token is translated from katakana to english
 
 ### Particles
-`res/particles/` contains a list of language particles which do not get capitalised during conversion. In particular, `hirakanji-latn_particles.txt` is a list of japanese particles which are checked when a token is converted from hiragana/kanji to romaji to figure out which phrases not to capitalise.
+`res/particles/` contains a list of language particles which do not get capitalised during conversion.
+
+Currently there are two particle files:
+- `hirakanji-latn_particles.txt`: list of japanese particles (romanized) which are checked when a token is translated from hiragana/kanji to romaji
+- `kata-latn_particles.txt`: list of english particles which are checked when a token is translated from katakana to english
 
 ## Runtime Dependencies
 - .NET Framework 4.5
