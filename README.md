@@ -13,6 +13,8 @@ For audio files it also converts the metadata tags for:
 ## Current Features
 - Convert files from japanese to romaji (including metadata)
 - Revert files (and metadata) back to their original names after a conversion
+- Extendable mapping list for incorrect translations
+- Extendable particle list for non-capitalised phrases
 
 ## Usage
 Note: Please unzip the folder before using it so that the conversion-history file can be written to permanently.
@@ -35,11 +37,11 @@ Note: Please unzip the folder before using it so that the conversion-history fil
 Whenever a conversion occurs, the conversion is saved in the `conversion-history.xml` file in the same directory as the program. The conversion data is saved in this file in case a file has to be reverted back.
 
 ### Mappings
-To ease the problem of incorrect conversions, there are mapping files located in `res/maps/` which will map the specified phrases into another phrase. For example, if the phrase `tsu` continuously gets converted into `tsud`, you can map create a new mapping `tsud:tsu` which will map `tsud` to `tsu` whenever a conversion occurs.
+To ease the problem of incorrect translations, there are mapping files located in `res/maps/` which will map the specified phrases into another phrase. For example, if the phrase `tsu` continuously gets translated into `tsud`, you can map create a new mapping `tsud:tsu` which will map `tsud` to `tsu` whenever a translation occurs.
 
 Currently there are two mapping files:
-- `hirakanji-latn_maps.txt`: Used whenever a token is converted from hiragana/kanji to romaji
-- `kata-latn_maps.txt`: Used whenever a token is converted from katakana to romaji
+- `hirakanji-latn_maps.txt`: Used whenever a token is translated from hiragana/kanji to romaji
+- `kata-latn_maps.txt`: Used whenever a token is translated from katakana to english
 
 ### Particles
 `res/particles/` contains a list of language particles which do not get capitalised during conversion. In particular, `hirakanji-latn_particles.txt` is a list of japanese particles which are checked when a token is converted from hiragana/kanji to romaji to figure out which phrases not to capitalise.
