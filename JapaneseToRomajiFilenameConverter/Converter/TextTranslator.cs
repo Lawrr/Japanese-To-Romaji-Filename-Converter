@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -37,24 +38,30 @@ namespace JapaneseToRomajiFileConverter.Converter {
             List<TextToken> textTokens = TextToken.GetTextTokens(inText);
 
             // Load maps and particles lists once
-            string jaLatnMapsPath = Path.Combine(Maps.DirectoryPath, Maps.JaLatn);
-            List<string> jaLatnMaps = new List<string>(File.ReadAllLines(jaLatnMapsPath));
+            string hirakanjiMapPath = Path.Combine(Maps.DirectoryPath, Maps.HirakanjiLatn);
+            List<string> hirakanjiMaps = new List<string>(File.ReadAllLines(hirakanjiMapPath));
 
-            string jaLatnParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.JaLatn);
-            List<string> jaLatnParticles = new List<string>(File.ReadAllLines(jaLatnParticlesPath));
+            string hirakanjiParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.HirakanjiLatn);
+            List<string> hirakanjiParticles = new List<string>(File.ReadAllLines(hirakanjiParticlesPath));
+
+            string kataMapPath = Path.Combine(Maps.DirectoryPath, Maps.KataLatn);
+            List<string> kataMaps = new List<string>(File.ReadAllLines(kataMapPath));
 
             // Translate each token
             string outText = "";
             foreach (TextToken textToken in textTokens) {
                 switch (textToken.Type) {
                     case TokenType.HiraganaKanji:
-                        outText += textToken.Translate(jaLatnMaps, jaLatnParticles);
+                        outText += textToken.Translate(hirakanjiMaps, hirakanjiParticles);
                         break;
 
                     case TokenType.Katakana:
+                        outText += textToken.Translate(kataMaps);
+                        break;
+
                     case TokenType.Latin:
                     default:
-                        outText += textToken.Translate(new List<string>(), new List<string>());
+                        outText += textToken.Translate();
                         break;
                 }
             }

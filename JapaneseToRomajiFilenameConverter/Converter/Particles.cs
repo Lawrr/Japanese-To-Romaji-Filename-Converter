@@ -3,7 +3,7 @@
 
         public const string DirectoryPath = "res/particles/";
 
-        public const string JaLatn = "ja-Latn_particles.txt";
+        public const string HirakanjiLatn = "hirakanji-latn_particles.txt";
 
     }
 }
