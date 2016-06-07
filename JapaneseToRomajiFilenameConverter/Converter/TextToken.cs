@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using System;
+using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Globalization;
@@ -180,7 +181,9 @@ namespace JapaneseToRomajiFileConverter.Converter {
         // 1. Latin - Don't translate
         // 2. Katakana - Translate to output language
         // 3. Hiragana / Kanji - Translate to phonetic
-        public string Translate(List<string> maps, List<string> particles, string languagePair = TextTranslator.LanguagePair) {
+        public string Translate(List<string> maps = null,
+                                List<string> particles = null,
+                                string languagePair = TextTranslator.LanguagePair) {
             string translation = "";
 
             switch (Type) {
@@ -212,37 +215,60 @@ namespace JapaneseToRomajiFileConverter.Converter {
             return WebUtility.HtmlDecode(translation);
         }
 
-        private string FormatTranslation(string translatedText, List<string> maps, List<string> particles) {
+        private string FormatTranslation(string translatedText,
+                                         List<string> maps = null,
+                                         List<string> particles = null) {
             // Add prefixes, trim whitespace, and capitalise words, etc.
             string outText = "";
             switch (Type) {
                 case TokenType.HiraganaKanji:
                     // Maps
-                    foreach (string map in maps) {
-                        string[] mapStrings = map.Split(MapSplitChar);
-                        if (mapStrings.Length != 2) continue;
+                    if (maps != null) {
+                        foreach (string map in maps) {
+                            string[] mapStrings = map.Split(MapSplitChar);
+                            if (mapStrings.Length != 2) continue;
 
-                        translatedText = Regex.Replace(translatedText,
-                                                       mapStrings[0],
-                                                       mapStrings[1],
-                                                       RegexOptions.IgnoreCase);
+                            translatedText = Regex.Replace(translatedText,
+                                mapStrings[0],
+                                mapStrings[1],
+                                RegexOptions.IgnoreCase);
+                        }
                     }
+
                     // Capitalise
                     translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);
+
                     // Particles
-                    foreach (string particle in particles) {
-                        translatedText = Regex.Replace(translatedText,
-                                                       @"\b" + particle + @"\b",
-                                                       particle,
-                                                       RegexOptions.IgnoreCase);
+                    if (particles != null) {
+                        foreach (string particle in particles) {
+                            translatedText = Regex.Replace(translatedText,
+                                @"\b" + particle + @"\b",
+                                particle,
+                                RegexOptions.IgnoreCase);
+                        }
                     }
+
                     // Trim and join
                     outText = Prefix + translatedText.Trim();
                     break;
 
                 case TokenType.Katakana:
+                    // Maps
+                    if (maps != null) {
+                        foreach (string map in maps) {
+                            string[] mapStrings = map.Split(MapSplitChar);
+                            if (mapStrings.Length != 2) continue;
+
+                            translatedText = Regex.Replace(translatedText,
+                                mapStrings[0],
+                                mapStrings[1],
+                                RegexOptions.IgnoreCase);
+                        }
+                    }
+
                     // Capitalise
                     translatedText = new CultureInfo("en").TextInfo.ToTitleCase(translatedText);
+                    
                     // Trim and join
                     outText = Prefix + translatedText.Trim();
                     break;
