@@ -22,7 +22,7 @@ namespace JapaneseToRomajiFileConverter.Converter {
             XDocument doc;
             try {
                 doc = XDocument.Load(FilePath);
-            } catch (XmlException) {
+            } catch (Exception) {
                 doc = new XDocument();
                 doc.Add(new XElement("Conversions"));
                 doc.Save(FilePath);
