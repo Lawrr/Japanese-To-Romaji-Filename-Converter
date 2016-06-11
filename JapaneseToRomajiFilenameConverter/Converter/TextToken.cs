@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
         public string Prefix { get; set; }
 
         public static Dictionary<string, string> PunctuationMap { get; private set; } = new Dictionary<string, string>() {
-            { "、", ", " },
+            { "、", "," },
             { "“", " \"" },
             { "”", "\"" }
         };
@@ -91,36 +92,39 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             return textTokens;
         }
 
-        public static string GetTokenPrefix(TokenType prevType, TokenType currType,
-                                            char prevLastChar, char currFirstChar) {
-            string prefix = "";
+        public static bool HasPrefix(TokenType prevType, TokenType currType, char prevLastChar, char currFirstChar) {
+            bool hasPrefix = char.IsPunctuation(currFirstChar);
 
             switch (currType) {
                 // =========================================================================
                 // Current: Latin
                 // =========================================================================
                 case TokenType.Latin:
-                    switch (prevType) {
-                        // ==============================
-                        // Previous: HiraganaKanji
-                        // ==============================
-                        case TokenType.HiraganaKanji:
-                            if (!char.IsWhiteSpace(currFirstChar) &&
-                                (!char.IsPunctuation(currFirstChar) || currFirstChar == '&') &&
-                                currFirstChar != '~' &&
-                                currFirstChar != '-') {
-                                prefix = " ";
-                            }
+                    // ==============================
+                    // Previous: HiraganaKanji / Katakana
+                    // ==============================
+                    if (!char.IsWhiteSpace(currFirstChar) && !char.IsPunctuation(currFirstChar)) {
+                        hasPrefix = true;
+                    }
+
+                    // Some other characters which override above
+                    switch (currFirstChar) {
+                        case '(':
+                        case '&':
+                            hasPrefix = true;
                             break;
 
-                        // ==============================
-                        // Previous: Katakana
-                        // ==============================
-                        case TokenType.Katakana:
-                            if (!char.IsWhiteSpace(currFirstChar) &&
-                                (!char.IsPunctuation(currFirstChar) || currFirstChar == '&')) {
-                                prefix = " ";
-                            }
+                        case '、':
+                        case ',':
+                        case '“':
+                        case '”':
+                        case '"':
+                        case ')':
+                        case '」':
+                        case '~':
+                        case '-':
+                        case '!':
+                            hasPrefix = false;
                             break;
                     }
                     break;
@@ -134,10 +138,20 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                         // Previous: Latin
                         // ==============================
                         case TokenType.Latin:
-                            if (!char.IsWhiteSpace(prevLastChar) &&
-                                prevLastChar != '~' &&
-                                prevLastChar != '-') {
-                                prefix = " ";
+                            if (!char.IsWhiteSpace(prevLastChar)) {
+                                hasPrefix = true;
+                            }
+
+                            // Some other characters which override above
+                            switch (prevLastChar) {
+                                case '(':
+                                case '「':
+                                case '"':
+                                case '“':
+                                case '~':
+                                case '-':
+                                    hasPrefix = false;
+                                    break;
                             }
                             break;
 
@@ -145,7 +159,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                         // Previous: Katakana
                         // ==============================
                         case TokenType.Katakana:
-                            prefix = " ";
+                            hasPrefix = true;
                             break;
                     }
                     break;
@@ -160,7 +174,19 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                         // ==============================
                         case TokenType.Latin:
                             if (!char.IsWhiteSpace(prevLastChar)) {
-                                prefix = " ";
+                                hasPrefix = true;
+                            }
+
+                            // Some other characters which override above
+                            switch (prevLastChar) {
+                                case '(':
+                                case '「':
+                                case '"':
+                                case '“':
+                                case '~':
+                                case '-':
+                                    hasPrefix = false;
+                                    break;
                             }
                             break;
 
@@ -168,10 +194,21 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                         // Previous: HirganaKanji
                         // ==============================
                         case TokenType.HiraganaKanji:
-                            prefix = " ";
+                            hasPrefix = true;
                             break;
                     }
                     break;
+            }
+
+            return hasPrefix;
+        }
+
+        public static string GetTokenPrefix(TokenType prevType, TokenType currType,
+                                            char prevLastChar, char currFirstChar) {
+            string prefix = "";
+
+            if (HasPrefix(prevType, currType, prevLastChar, currFirstChar)) {
+                prefix = " ";
             }
 
             return prefix;
@@ -190,7 +227,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     // Get phoentic text
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
-                    string phoneticText = doc.GetElementbyId("src-translit").InnerText;
+                    string phoneticText = WebUtility.HtmlDecode(doc.GetElementbyId("src-translit").InnerText);
                     translation = FormatTranslation(phoneticText, maps, particles);
                     break;
                 }
@@ -199,7 +236,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     // Get translated text
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
-                    string translatedText = doc.GetElementbyId("result_box").InnerText;
+                    string translatedText = WebUtility.HtmlDecode(doc.GetElementbyId("result_box").InnerText);
                     translation = FormatTranslation(translatedText, maps, particles);
                     break;
                 }
@@ -211,7 +248,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                 }
             }
 
-            return WebUtility.HtmlDecode(translation);
+            return translation;
         }
 
         private string FormatTranslation(string translatedText,
