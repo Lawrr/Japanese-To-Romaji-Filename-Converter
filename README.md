@@ -41,14 +41,14 @@ To ease the problem of incorrect translations, there are mapping files located i
 
 Currently there are two mapping files:
 - `hirakanji-latn_maps.txt`: Used whenever a token is translated from hiragana/kanji to romaji
-- `kata-latn_maps.txt`: Used whenever a token is translated from katakana to english
+- `kata-en_maps.txt`: Used whenever a token is translated from katakana to english
 
 ### Particles
 `res/particles/` contains a list of language particles which do not get capitalised during conversion.
 
 Currently there are two particle files:
 - `hirakanji-latn_particles.txt`: list of japanese particles (romanized) which are checked when a token is translated from hiragana/kanji to romaji
-- `kata-latn_particles.txt`: list of english particles which are checked when a token is translated from katakana to english
+- `kata-en_particles.txt`: list of english particles which are checked when a token is translated from katakana to english
 
 ## Runtime Dependencies
 - .NET Framework 4.5
