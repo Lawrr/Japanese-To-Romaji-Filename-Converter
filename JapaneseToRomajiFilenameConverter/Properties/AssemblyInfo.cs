@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Japanese To Romaji File Converter")]
+[assembly: AssemblyTitle("Japanese To Romaji Filename Converter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Japanese To Romaji File Converter")]
+[assembly: AssemblyProduct("Japanese To Romaji Filename Converter")]
 [assembly: AssemblyCopyright("Copyright © Lawrr 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
