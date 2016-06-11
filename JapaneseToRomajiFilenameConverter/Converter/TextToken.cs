@@ -1,10 +1,10 @@
-﻿using HtmlAgilityPack;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using HtmlAgilityPack;
 
-namespace JapaneseToRomajiFileConverter.Converter {
+namespace JapaneseToRomajiFilenameConverter.Converter {
     public class TextToken {
 
         public TokenType Type { get; private set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-namespace JapaneseToRomajiFileConverter.Converter {
+namespace JapaneseToRomajiFilenameConverter.Converter {
     public class FileConverter {
 
         public event EventHandler<ProgressEventArgs> Progress;

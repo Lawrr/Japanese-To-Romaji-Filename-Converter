@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 using System.Text.RegularExpressions;
 
-namespace JapaneseToRomajiFileConverter.Converter {
+namespace JapaneseToRomajiFilenameConverter.Converter {
     public class TextTranslator {
 
         public const string LanguagePair = "ja|en";

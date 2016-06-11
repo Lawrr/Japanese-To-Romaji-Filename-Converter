@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace JapaneseToRomajiFileConverter {
+namespace JapaneseToRomajiFilenameConverter {
     public partial class MainForm : Form {
 
         public MainForm() {

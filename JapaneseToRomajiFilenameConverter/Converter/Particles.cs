@@ -1,4 +1,4 @@
-﻿namespace JapaneseToRomajiFileConverter.Converter {
+﻿namespace JapaneseToRomajiFilenameConverter.Converter {
     public static class Particles {
 
         public const string DirectoryPath = "res/particles/";

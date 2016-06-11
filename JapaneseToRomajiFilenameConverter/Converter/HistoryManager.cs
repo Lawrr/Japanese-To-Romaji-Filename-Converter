@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace JapaneseToRomajiFileConverter.Converter {
+namespace JapaneseToRomajiFilenameConverter.Converter {
     public class HistoryManager {
 
         public const string DefaultFilePath = "conversion-history.xml";

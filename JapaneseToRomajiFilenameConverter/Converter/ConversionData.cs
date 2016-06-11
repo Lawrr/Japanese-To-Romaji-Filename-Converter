@@ -1,4 +1,4 @@
-﻿namespace JapaneseToRomajiFileConverter.Converter {
+﻿namespace JapaneseToRomajiFilenameConverter.Converter {
 
     public class ConversionData {
 

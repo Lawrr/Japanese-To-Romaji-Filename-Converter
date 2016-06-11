@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace JapaneseToRomajiFileConverter {
+namespace JapaneseToRomajiFilenameConverter {
     static class Program {
         /// <summary>
         /// The main entry point for the application.
