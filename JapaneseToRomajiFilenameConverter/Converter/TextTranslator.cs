@@ -48,10 +48,10 @@ namespace JapaneseToRomajiFileConverter.Converter {
             string hirakanjiParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.HirakanjiLatn);
             List<string> hirakanjiParticles = new List<string>(File.ReadAllLines(hirakanjiParticlesPath));
 
-            string kataMapPath = Path.Combine(Maps.DirectoryPath, Maps.KataLatn);
+            string kataMapPath = Path.Combine(Maps.DirectoryPath, Maps.KataEn);
             List<string> kataMaps = new List<string>(File.ReadAllLines(kataMapPath));
 
-            string kataParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.KataLatn);
+            string kataParticlesPath = Path.Combine(Particles.DirectoryPath, Particles.KataEn);
             List<string> kataParticles = new List<string>(File.ReadAllLines(kataParticlesPath));
 
             // Translate each token
