@@ -7,8 +7,8 @@
     <ProjectGuid>{3AE55EA6-887D-4AF3-9CD3-141DCFBB9859}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JapaneseToRomajiFileConverter</RootNamespace>
-    <AssemblyName>Japanese To Romaji File Converter</AssemblyName>
+    <RootNamespace>JapaneseToRomajiFilenameConverter</RootNamespace>
+    <AssemblyName>Japanese To Romaji Filename Converter</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
