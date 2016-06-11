@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using JapaneseToRomajiFileConverter.Converter;
+using JapaneseToRomajiFilenameConverter.Converter;
 
-namespace JapaneseToRomajiFileConverter {
+namespace JapaneseToRomajiFilenameConverter {
     public partial class ReverterForm : Form {
 
         private List<ConversionItem> ConversionItems;

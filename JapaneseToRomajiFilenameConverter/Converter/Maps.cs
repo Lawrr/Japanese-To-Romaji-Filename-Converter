@@ -1,4 +1,4 @@
-﻿namespace JapaneseToRomajiFileConverter.Converter {
+﻿namespace JapaneseToRomajiFilenameConverter.Converter {
     public static class Maps {
 
         public const string DirectoryPath = "res/maps/";

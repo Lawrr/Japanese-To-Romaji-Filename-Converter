@@ -1,12 +1,12 @@
-﻿using JapaneseToRomajiFileConverter.Converter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using JapaneseToRomajiFilenameConverter.Converter;
 
-namespace JapaneseToRomajiFileConverter {
+namespace JapaneseToRomajiFilenameConverter {
     public partial class ConverterForm : Form {
 
         public event EventHandler<ProgressEventArgs> Progress;

@@ -1,4 +1,4 @@
-﻿namespace JapaneseToRomajiFileConverter {
+﻿namespace JapaneseToRomajiFilenameConverter {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.
