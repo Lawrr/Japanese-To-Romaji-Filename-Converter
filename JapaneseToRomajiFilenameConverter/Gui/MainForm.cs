@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using JapaneseToRomajiFilenameConverter.Converter;
@@ -14,20 +13,12 @@ using File = System.IO.File;
 namespace JapaneseToRomajiFilenameConverter {
     public partial class MainForm : Form {
 
-        public event EventHandler<ProgressEventArgs> Progress;
-
-        private HistoryManager HistoryManager;
-        private Task FileConversionTask;
-        private CancellationTokenSource FileConversionTaskCts;
-
         public MainForm() {
             InitializeComponent();
 
             AllowDrop = true;
             DragEnter += new DragEventHandler(MainForm_DragEnter);
             DragDrop += new DragEventHandler(MainForm_DragDrop);
-
-            HistoryManager = new HistoryManager();
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
