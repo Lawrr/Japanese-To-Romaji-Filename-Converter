@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using JapaneseToRomajiFilenameConverter.Converter;
 using JapaneseToRomajiFilenameConverter.Gui;
 using TagLib;
 using File = System.IO.File;
