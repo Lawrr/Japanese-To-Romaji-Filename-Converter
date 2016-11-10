@@ -76,37 +76,37 @@
     <Compile Include="Converter\ConversionData.cs" />
     <Compile Include="Converter\ConversionItem.cs" />
     <Compile Include="Converter\FileConverter.cs" />
-    <Compile Include="ConverterForm.cs">
+    <Compile Include="Gui\ConverterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConverterForm.Designer.cs">
+    <Compile Include="Gui\ConverterForm.Designer.cs">
       <DependentUpon>ConverterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Converter\Maps.cs" />
     <Compile Include="Converter\Particles.cs" />
     <Compile Include="Converter\HistoryManager.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Gui\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Gui\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Converter\TextToken.cs" />
     <Compile Include="Converter\TextTranslator.cs" />
-    <Compile Include="ReverterForm.cs">
+    <Compile Include="Gui\ReverterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReverterForm.Designer.cs">
+    <Compile Include="Gui\ReverterForm.Designer.cs">
       <DependentUpon>ReverterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Unicode.cs" />
-    <EmbeddedResource Include="ConverterForm.resx">
+    <EmbeddedResource Include="Gui\ConverterForm.resx">
       <DependentUpon>ConverterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Gui\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -119,7 +119,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ReverterForm.resx">
+    <EmbeddedResource Include="Gui\ReverterForm.resx">
       <DependentUpon>ReverterForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
