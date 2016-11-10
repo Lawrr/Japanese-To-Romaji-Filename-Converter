@@ -136,22 +136,22 @@ namespace JapaneseToRomajiFilenameConverter {
             totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
         }
 
-        private void AddFiles(IEnumerable<string> items) {
-            foreach (string item in items) {
-                if (Directory.Exists(item)) {
-                    // if the item is a directory get the files within the directory 
-                    string[] directoryFiles = Directory.GetFiles(item, "*", SearchOption.AllDirectories);
-                    foreach (string file in directoryFiles) {
-                        AddFile(file);
-                    }
-                } else {
-                    AddFile(item);
-                }
-            }
-
+        private async void AddFiles(IEnumerable<string> items) {
             OnHasFiles();
 
-            totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
+            await Task.Run(() => {
+                foreach (string item in items) {
+                    if (Directory.Exists(item)) {
+                        // if the item is a directory get the files within the directory 
+                        string[] directoryFiles = Directory.GetFiles(item, "*", SearchOption.AllDirectories);
+                        foreach (string file in directoryFiles) {
+                            AddFile(file);
+                        }
+                    } else {
+                        AddFile(item);
+                    }
+                }
+            });
         }
 
         private void AddFile(string filePath) {
@@ -183,7 +183,11 @@ namespace JapaneseToRomajiFilenameConverter {
 
             FileBoxItem item = new FileBoxItem(FilesBox, filePath,
                 fileImage?.GetThumbnailImage(FilesBox.ImageSize.Width, FilesBox.ImageSize.Height, null, IntPtr.Zero));
-            FilesBox.Items.Add(item);
+
+            this.InvokeSafe(() => {
+                FilesBox.Items.Add(item);
+                totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
+            });
         }
 
     }
