@@ -102,6 +102,7 @@
     <Compile Include="ReverterForm.Designer.cs">
       <DependentUpon>ReverterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Unicode.cs" />
     <EmbeddedResource Include="ConverterForm.resx">
       <DependentUpon>ConverterForm.cs</DependentUpon>
     </EmbeddedResource>

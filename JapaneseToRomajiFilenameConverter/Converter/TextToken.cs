@@ -11,7 +11,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
         public string Text { get; set; }
         public string Prefix { get; set; }
 
-        public static Dictionary<string, string> PunctuationMap { get; private set; } = new Dictionary<string, string>() {
+        public static Dictionary<string, string> PunctuationMap { get; } = new Dictionary<string, string>() {
             { "、", "," },
             { "“", "\"" },
             { "”", "\"" }
@@ -38,13 +38,13 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             foreach (char c in inText) {
                 string cs = c.ToString();
 
-                if (TextTranslator.IsProlongedChar(c)) {
+                if (Unicode.IsProlongedChar(c)) {
                     // Special condition for prolonged sound character
                     currCharTokenType = prevCharTokenType;
-                } else if (TextTranslator.IsHiragana(cs) || TextTranslator.IsKanji(cs)) {
+                } else if (Unicode.IsHiragana(cs) || Unicode.IsKanji(cs)) {
                     // Hiragana / Kanji
                     currCharTokenType = TokenType.HiraganaKanji;
-                } else if (TextTranslator.IsKatakana(cs)) {
+                } else if (Unicode.IsKatakana(cs)) {
                     // Katakana
                     currCharTokenType = TokenType.Katakana;
                 } else {
