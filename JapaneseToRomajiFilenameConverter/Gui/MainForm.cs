@@ -1,10 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using JapaneseToRomajiFilenameConverter.Converter;
+using JapaneseToRomajiFilenameConverter.Gui;
+using TagLib;
+using File = System.IO.File;
 
 namespace JapaneseToRomajiFilenameConverter {
     public partial class MainForm : Form {
+
+        public event EventHandler<ProgressEventArgs> Progress;
+
+        private HistoryManager HistoryManager;
+        private Task FileConversionTask;
+        private CancellationTokenSource FileConversionTaskCts;
 
         public MainForm() {
             InitializeComponent();
@@ -12,6 +26,8 @@ namespace JapaneseToRomajiFilenameConverter {
             AllowDrop = true;
             DragEnter += new DragEventHandler(MainForm_DragEnter);
             DragDrop += new DragEventHandler(MainForm_DragDrop);
+
+            HistoryManager = new HistoryManager();
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -25,7 +41,13 @@ namespace JapaneseToRomajiFilenameConverter {
 
         private void ConvertBTN_Click(object sender, EventArgs e) {
             ConverterForm convertForm = new ConverterForm();
-            convertForm.ConvertFiles(FilesBox.Items.Cast<string>().ToList());
+
+            List<string> files = new List<string>();
+            foreach (FileBoxItem item in FilesBox.Items) {
+                files.Add(item.ToString());
+            }
+
+            convertForm.ConvertFiles(files);
             convertForm.ShowDialog();
         }
 
@@ -100,7 +122,7 @@ namespace JapaneseToRomajiFilenameConverter {
             selectedFilesLabel.Text = "Selected Files: " + FilesBox.SelectedIndices.Count;
         }
 
-        private void RemoveFiles(int[] indices) {
+        private void RemoveFiles(IReadOnlyList<int> indices) {
             for (int i = indices.Count() - 1; i >= 0; i--) {
                 FilesBox.Items.RemoveAt(indices[i]);
             }
@@ -114,7 +136,7 @@ namespace JapaneseToRomajiFilenameConverter {
             totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
         }
 
-        private void AddFiles(string[] items) {
+        private void AddFiles(IEnumerable<string> items) {
             foreach (string item in items) {
                 if (Directory.Exists(item)) {
                     // if the item is a directory get the files within the directory 
@@ -133,9 +155,35 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         private void AddFile(string filePath) {
-            if (File.Exists(filePath) && FilesBox.Items.IndexOf(filePath) == -1) {
-                FilesBox.Items.Add(filePath);
+            if (!File.Exists(filePath) || FilesBox.Items.IndexOf(filePath) != -1) return;
+
+            // Extract image from file (if it has one)
+            Image fileImage = null;
+
+            // Extract from audio file
+            try {
+                TagLib.File tagFile = TagLib.File.Create(filePath);
+                if (tagFile.Tag.Pictures.Length > 0) {
+                    IPicture pic = tagFile.Tag.Pictures[0];
+                    MemoryStream ms = new MemoryStream(pic.Data.Data);
+                    fileImage = Image.FromStream(ms);
+                }
+            } catch (Exception) {
+                // ignored
             }
+
+            // Extract from image file
+            if (fileImage == null) {
+                try {
+                    fileImage = Image.FromFile(filePath);
+                } catch (Exception) {
+                    // ignored
+                }
+            }
+
+            FileBoxItem item = new FileBoxItem(FilesBox, filePath,
+                fileImage?.GetThumbnailImage(FilesBox.ImageSize.Width, FilesBox.ImageSize.Height, null, IntPtr.Zero));
+            FilesBox.Items.Add(item);
         }
 
     }
