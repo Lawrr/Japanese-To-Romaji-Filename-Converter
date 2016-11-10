@@ -42,11 +42,16 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
 
                 // Get tags
-                TagLib.File tagFile = TagLib.File.Create(filePath);
-                string title = tagFile.Tag.Title ?? "";
-                string album = tagFile.Tag.Album ?? "";
-                string[] performers = tagFile.Tag.Performers ?? new string[] {};
-                string[] albumArtists = tagFile.Tag.AlbumArtists ?? new string[] {};
+                TagLib.File tagFile = null;
+                try {
+                    tagFile = TagLib.File.Create(filePath);
+                } catch (Exception) {
+                    // ignored
+                }
+                string title = tagFile?.Tag.Title ?? "";
+                string album = tagFile?.Tag.Album ?? "";
+                string[] performers = tagFile?.Tag.Performers ?? new string[] {};
+                string[] albumArtists = tagFile?.Tag.AlbumArtists ?? new string[] {};
 
                 // Store old conversion data
                 ConversionData oldData = new ConversionData(filePath,
@@ -79,11 +84,13 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                 }
 
                 // Set new tags
-                tagFile.Tag.Title = title;
-                tagFile.Tag.Album = album;
-                tagFile.Tag.Performers = performers;
-                tagFile.Tag.AlbumArtists = albumArtists;
-                tagFile.Save();
+                if (tagFile != null) {
+                    tagFile.Tag.Title = title;
+                    tagFile.Tag.Album = album;
+                    tagFile.Tag.Performers = performers;
+                    tagFile.Tag.AlbumArtists = albumArtists;
+                    tagFile.Save();
+                }
 
                 // Replace illegal filename characters from the new filename
                 foreach (string s in IllegalFilenameMap.Keys) {
@@ -135,12 +142,20 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                 }
 
                 // Revert tags
-                TagLib.File tagFile = TagLib.File.Create(item.NewData.FilePath);
-                tagFile.Tag.Title = item.OldData.Title;
-                tagFile.Tag.Album = item.OldData.Album;
-                tagFile.Tag.Performers = item.OldData.Performers;
-                tagFile.Tag.AlbumArtists = item.OldData.AlbumArtists;
-                tagFile.Save();
+                TagLib.File tagFile = null;
+                try {
+                    tagFile = TagLib.File.Create(item.NewData.FilePath);
+                } catch (Exception) {
+                    // ignored
+                }
+
+                if (tagFile != null) {
+                    tagFile.Tag.Title = item.OldData.Title;
+                    tagFile.Tag.Album = item.OldData.Album;
+                    tagFile.Tag.Performers = item.OldData.Performers;
+                    tagFile.Tag.AlbumArtists = item.OldData.AlbumArtists;
+                    tagFile.Save();
+                }
 
                 // Revert filename
                 File.Move(item.NewData.FilePath, item.OldData.FilePath);
