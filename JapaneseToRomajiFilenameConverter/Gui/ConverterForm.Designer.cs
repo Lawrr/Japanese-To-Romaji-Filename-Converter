@@ -52,7 +52,7 @@
             this.CloseBTN.Name = "CloseBTN";
             this.CloseBTN.Size = new System.Drawing.Size(720, 37);
             this.CloseBTN.TabIndex = 2;
-            this.CloseBTN.Text = "Cancel";
+            this.CloseBTN.Text = "Abort";
             this.CloseBTN.UseVisualStyleBackColor = true;
             this.CloseBTN.Click += new System.EventHandler(this.CloseBTN_Click);
             // 

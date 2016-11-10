@@ -15,6 +15,9 @@ namespace JapaneseToRomajiFilenameConverter {
         private Task FileConversionTask;
         private CancellationTokenSource FileConversionTaskCts;
 
+        private int ConvertedFiles = 0;
+        private int TotalFiles = 0;
+
         public ConverterForm() {
             InitializeComponent();
 
@@ -37,6 +40,8 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         public async void ConvertFiles(List<string> files) {
+            TotalFiles = files.Count;
+
             FileConverter fileConverter = new FileConverter();
             fileConverter.Progress += new EventHandler<ProgressEventArgs>(Converter_Progress);
 
@@ -53,6 +58,8 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         public async void RevertFiles(List<ConversionItem> fileItems) {
+            TotalFiles = fileItems.Count;
+
             FileConverter fileConverter = new FileConverter();
             fileConverter.Progress += new EventHandler<ProgressEventArgs>(Converter_Progress);
 
@@ -78,11 +85,14 @@ namespace JapaneseToRomajiFilenameConverter {
                         HistoryManager.SaveConversion(e.Item);
                     }
 
+                    ConvertedFiles++;
+
                     this.InvokeSafe(() => {
                         ProgressBox.AppendText(string.Format("Converted: {0} to {1}{2}",
                                                              Path.GetFileName(e.Item.OldData.FilePath),
                                                              Path.GetFileName(e.Item.NewData.FilePath),
                                                              Environment.NewLine));
+                        Text = $"Conversion Progress {ConvertedFiles}/{TotalFiles}";
                     });
                     break;
 
@@ -90,11 +100,14 @@ namespace JapaneseToRomajiFilenameConverter {
                     // Remove the conversion from history
                     HistoryManager.RemoveConversion(e.Item);
 
+                    ConvertedFiles++;
+
                     this.InvokeSafe(() => {
                         ProgressBox.AppendText(string.Format("Reverted: {0} to {1}{2}",
                                                              Path.GetFileName(e.Item.NewData.FilePath),
                                                              Path.GetFileName(e.Item.OldData.FilePath),
                                                              Environment.NewLine));
+                        Text = $"Conversion Progress {ConvertedFiles}/{TotalFiles}";
                     });
                     break;
 
