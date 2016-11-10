@@ -24,11 +24,11 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
         public FileConverter() {
         }
 
-        public void Convert(List<string> files) {
+        public void Convert(IEnumerable<string> files) {
             Convert(files, CancellationToken.None);
         }
 
-        public void Convert(List<string> files, CancellationToken ct) {
+        public void Convert(IEnumerable<string> files, CancellationToken ct) {
             // Convert each file
             foreach (string filePath in files) {
                 if (!File.Exists(filePath)) {
@@ -118,11 +118,11 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             OnProgressEvent(ProgressEvent.Completed);
         }
 
-        public void Revert(List<ConversionItem> fileItems) {
+        public void Revert(IEnumerable<ConversionItem> fileItems) {
             Revert(fileItems, CancellationToken.None);
         }
 
-        public void Revert(List<ConversionItem> fileItems, CancellationToken ct) {
+        public void Revert(IEnumerable<ConversionItem> fileItems, CancellationToken ct) {
             foreach (ConversionItem item in fileItems) {
                 if (!File.Exists(item.NewData.FilePath)) {
                     // TODO Error
