@@ -132,7 +132,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
         public void Revert(IEnumerable<ConversionItem> fileItems, CancellationToken ct) {
             foreach (ConversionItem item in fileItems) {
                 if (!File.Exists(item.NewData.FilePath)) {
-                    // TODO Error
+                    OnProgressEvent(ProgressEvent.RevertFailed, item);
                     continue;
                 }
 
@@ -173,7 +173,8 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
     public enum ProgressEvent {
         Converted,
         Reverted,
-        Completed
+        Completed,
+        RevertFailed
     }
 
     public class ProgressEventArgs : EventArgs {

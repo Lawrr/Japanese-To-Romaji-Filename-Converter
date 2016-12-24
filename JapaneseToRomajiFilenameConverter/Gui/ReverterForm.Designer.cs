@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             this.ConversionsBox = new System.Windows.Forms.ListBox();
             this.RevertBTN = new System.Windows.Forms.Button();
+            this.ClearBTN = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ConversionsBox
@@ -56,11 +57,24 @@
             this.RevertBTN.UseVisualStyleBackColor = true;
             this.RevertBTN.Click += new System.EventHandler(this.RevertBTN_Click);
             // 
+            // ClearBTN
+            // 
+            this.ClearBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ClearBTN.Enabled = false;
+            this.ClearBTN.Location = new System.Drawing.Point(767, 427);
+            this.ClearBTN.Name = "ClearBTN";
+            this.ClearBTN.Size = new System.Drawing.Size(95, 45);
+            this.ClearBTN.TabIndex = 1;
+            this.ClearBTN.Text = "Clear History";
+            this.ClearBTN.UseVisualStyleBackColor = true;
+            this.ClearBTN.Click += new System.EventHandler(this.ClearBTN_Click);
+            // 
             // ReverterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(874, 484);
+            this.Controls.Add(this.ClearBTN);
             this.Controls.Add(this.RevertBTN);
             this.Controls.Add(this.ConversionsBox);
             this.MinimumSize = new System.Drawing.Size(400, 200);
@@ -75,5 +89,6 @@
 
         private System.Windows.Forms.ListBox ConversionsBox;
         private System.Windows.Forms.Button RevertBTN;
+        private System.Windows.Forms.Button ClearBTN;
     }
 }

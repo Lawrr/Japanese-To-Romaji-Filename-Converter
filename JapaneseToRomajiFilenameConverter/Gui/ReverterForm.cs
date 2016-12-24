@@ -7,13 +7,15 @@ using JapaneseToRomajiFilenameConverter.Converter;
 namespace JapaneseToRomajiFilenameConverter {
     public partial class ReverterForm : Form {
 
-        private List<ConversionItem> ConversionItems;
-
         public ReverterForm() {
             InitializeComponent();
 
-            ConversionItems = HistoryManager.GetConversions();
-            AddConversions(ConversionItems);
+            IEnumerable<ConversionItem> conversionItems = HistoryManager.GetConversions();
+            AddConversions(conversionItems);
+
+            if (ConversionsBox.Items.Count > 0) {
+                ClearBTN.Enabled = true;
+            }
         }
 
         private void ReverterForm_Load(object sender, EventArgs e) {
@@ -22,7 +24,7 @@ namespace JapaneseToRomajiFilenameConverter {
             Activate();
         }
 
-        private void AddConversions(List<ConversionItem> items) {
+        private void AddConversions(IEnumerable<ConversionItem> items) {
             foreach (ConversionItem item in items) {
                 ConversionsBox.Items.Add(item);
             }
@@ -33,6 +35,16 @@ namespace JapaneseToRomajiFilenameConverter {
             convertForm.Progress += new EventHandler<ProgressEventArgs>(Revert_Progress);
             convertForm.RevertFiles(ConversionsBox.SelectedItems.Cast<ConversionItem>().ToList());
             convertForm.ShowDialog();
+        }
+
+        private void ClearBTN_Click(object sender, EventArgs e) {
+            HistoryManager historyManager = new HistoryManager();
+            foreach (ConversionItem item in HistoryManager.GetConversions()) {
+                historyManager.RemoveConversion(item);
+            }
+
+            ConversionsBox.Items.Clear();
+            ClearBTN.Enabled = false;
         }
 
         private void ConversionsBox_SelectedIndexChanged(object sender, EventArgs e) {
@@ -46,12 +58,13 @@ namespace JapaneseToRomajiFilenameConverter {
         private void Revert_Progress(object sender, ProgressEventArgs e) {
             switch (e.Type) {
                 case ProgressEvent.Reverted:
+                case ProgressEvent.RevertFailed:
                     this.InvokeSafe(() => {
                         ConversionsBox.Items.Remove(e.Item);
                     });
                     break;
+
             }
         }
-
     }
 }
