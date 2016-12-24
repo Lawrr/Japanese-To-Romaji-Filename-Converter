@@ -111,6 +111,20 @@ namespace JapaneseToRomajiFilenameConverter {
                     });
                     break;
 
+                case ProgressEvent.RevertFailed:
+                    HistoryManager.RemoveConversion(e.Item);
+
+                    ConvertedFiles++;
+
+                    this.InvokeSafe(() => {
+                        ProgressBox.AppendText(string.Format("Failed: {0} to {1}{2}",
+                                                             Path.GetFileName(e.Item.NewData.FilePath),
+                                                             Path.GetFileName(e.Item.OldData.FilePath),
+                                                             Environment.NewLine));
+                        Text = $"Conversion Progress {ConvertedFiles}/{TotalFiles}";
+                    });
+                    break;
+
                 case ProgressEvent.Completed:
                     this.InvokeSafe(() => {
                         ProgressBox.AppendText("Conversion completed");
