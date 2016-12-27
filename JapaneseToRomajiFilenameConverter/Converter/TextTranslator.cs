@@ -13,6 +13,10 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
 
         private static char MapSplitChar = ':';
 
+        private static List<string> Suffixes = new List<string>() {
+            "Iru"
+        };
+
         public static string GetTranslatorUrl(string text, string languagePair = LanguagePair) {
             return string.Format(TranslatorUrl, text, languagePair);
         }
@@ -98,5 +102,14 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             return !text.Any(c => Unicode.IsJapanese(c.ToString()));
         }
 
+        public static string attachSuffixes(string text) {
+            foreach (string suffix in Suffixes) {
+                text = Regex.Replace(text,
+                    @"\s" + suffix + @"\b",
+                    suffix.ToLower());
+            }
+
+            return text;
+        }
     }
 }
