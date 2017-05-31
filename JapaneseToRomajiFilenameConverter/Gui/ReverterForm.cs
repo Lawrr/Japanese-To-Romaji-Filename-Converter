@@ -31,6 +31,10 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         private void RevertBTN_Click(object sender, System.EventArgs e) {
+            var confirmRes = MessageBox.Show("Are you sure you want to revert the selected files?",
+                                             "Revert Files", MessageBoxButtons.OKCancel);
+            if (confirmRes != DialogResult.OK) return;
+
             ConverterForm convertForm = new ConverterForm();
             convertForm.Progress += new EventHandler<ProgressEventArgs>(Revert_Progress);
             convertForm.RevertFiles(ConversionsBox.SelectedItems.Cast<ConversionItem>().ToList());
@@ -38,6 +42,10 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         private void ClearBTN_Click(object sender, EventArgs e) {
+            var confirmRes = MessageBox.Show("Are you sure you want to clear your history?",
+                                             "Clear History", MessageBoxButtons.OKCancel);
+            if (confirmRes != DialogResult.OK) return;
+
             HistoryManager historyManager = new HistoryManager();
             foreach (ConversionItem item in HistoryManager.GetConversions()) {
                 historyManager.RemoveConversion(item);
