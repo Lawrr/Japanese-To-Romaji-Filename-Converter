@@ -155,8 +155,9 @@ namespace JapaneseToRomajiFilenameConverter {
                 TagLib.File tagFile = TagLib.File.Create(filePath);
                 if (tagFile.Tag.Pictures.Length > 0) {
                     IPicture pic = tagFile.Tag.Pictures[0];
-                    MemoryStream ms = new MemoryStream(pic.Data.Data);
-                    fileImage = Image.FromStream(ms);
+                    using (MemoryStream ms = new MemoryStream(pic.Data.Data)) {
+                        fileImage = Image.FromStream(ms);
+                    }
                 }
             } catch (Exception) {
                 // ignored
@@ -165,7 +166,9 @@ namespace JapaneseToRomajiFilenameConverter {
             // Extract from image file
             if (fileImage == null) {
                 try {
-                    fileImage = Image.FromFile(filePath);
+                    using (Image img = Image.FromFile(filePath)) {
+                        fileImage = new Bitmap(img);
+                    }
                 } catch (Exception) {
                     // ignored
                 }
