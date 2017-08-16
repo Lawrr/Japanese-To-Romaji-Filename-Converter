@@ -123,6 +123,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                         case '~':
                         case '-':
                         case '!':
+                        case '?':
                             hasPrefix = false;
                             break;
                     }
@@ -257,8 +258,8 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             string outText = "";
             switch (Type) {
                 case TokenType.HiraganaKanji:
-                    outText = TextTranslator.FixYouon(translatedText);
-                    break;
+                    translatedText = TextTranslator.FixYouon(translatedText);
+                    goto case TokenType.Katakana;
 
                 case TokenType.Katakana:
                     // Maps

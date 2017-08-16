@@ -26,6 +26,9 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             // TODO check japanese punctuation too
             // if (IsTranslated(inText)) return inText;
 
+            // Normalize to convert full-width characters
+            inText = inText.Normalize(NormalizationForm.FormKC);
+
             // Split the text into separate sequential tokens and translate each token
             List<TextToken> textTokens = TextToken.GetTextTokens(inText);
 
