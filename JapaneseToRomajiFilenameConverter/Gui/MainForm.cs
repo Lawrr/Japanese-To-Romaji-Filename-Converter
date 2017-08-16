@@ -107,7 +107,7 @@ namespace JapaneseToRomajiFilenameConverter {
 
         private void ClearFiles() {
             AddFilesCts.Cancel();
-            FilesBox.Items.Clear();
+            FilesBox.ClearItems();
             OnHasNoFiles();
 
             totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
