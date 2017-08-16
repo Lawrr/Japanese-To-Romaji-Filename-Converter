@@ -22,6 +22,10 @@ namespace JapaneseToRomajiFilenameConverter {
             InitializeComponent();
 
             HistoryManager = new HistoryManager();
+
+            if (!IsHandleCreated) {
+                CreateHandle();
+            }
         }
 
         private void ConverterForm_Load(object sender, EventArgs e) {
