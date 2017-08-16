@@ -1,65 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Timers;
 using System.Windows.Forms;
 using TagLib;
+using Timer = System.Timers.Timer;
 
 namespace JapaneseToRomajiFilenameConverter.Gui {
 
     public partial class FileBox : ListBox {
 
         public Size ImageSize { get; } = new Size(100, 100);
+        // Loads images which have been requested to be drawn
+        // Loaded in the latest order so it is closest to where you last viewed... i.e. stack
+        private readonly Stack<DrawItemEventArgs> OnDemandImageLoadStack = new Stack<DrawItemEventArgs>();
+        private readonly Timer ImageLoadTimer;
 
         public FileBox() {
             InitializeComponent();
             DoubleBuffered = true;
+
+            ImageLoadTimer = new Timer(10);
+            ImageLoadTimer.Elapsed += new ElapsedEventHandler(LoadImage);
+            ImageLoadTimer.Enabled = true;
+        }
+
+        private void LoadImage(object sender, ElapsedEventArgs e) {
+            if (OnDemandImageLoadStack.Count == 0) {
+                ImageLoadTimer.Enabled = false;
+                return;
+            }
+
+            try {
+                DrawItemEventArgs itemEventArgs = OnDemandImageLoadStack.Pop();
+                int index = itemEventArgs.Index;
+                FileBoxItem item = (FileBoxItem) Items[index];
+                item.LoadImage(ImageSize.Width, ImageSize.Height);
+
+                int numVisibleItems = ClientSize.Height/ItemHeight;
+                int nextIndex = -1;
+                if (OnDemandImageLoadStack.Count > 0) {
+                    try {
+                        nextIndex = OnDemandImageLoadStack.Peek().Index;
+                    } catch (NullReferenceException) {
+                        // Null event args
+                    }
+                }
+                this.InvokeSafe(() => {
+                    // Refresh only if we aren't going to have to refresh after the next item as well
+                    if ((index >= TopIndex && index <= TopIndex + numVisibleItems) &&
+                        !(nextIndex >= TopIndex && nextIndex <= TopIndex + numVisibleItems)) {
+                        Refresh();
+                    }
+                });
+            } catch (ArgumentOutOfRangeException) {
+                // ignored
+            }
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e) {
+            base.OnDrawItem(e);
+
             if (Items.Count > 0) {
                 FileBoxItem item = (FileBoxItem)Items[e.Index];
 
-                if (!item.LoadedImage) {
-                    item.LoadedImage = true;
-
-                    Image thumbnail = null;
-                    string filePath = Path.Combine(item.DirectoryName, item.FileName);
-
-                    // Extract from audio file
-                    try {
-                        TagLib.File tagFile = TagLib.File.Create(filePath);
-                        if (tagFile.Tag.Pictures.Length > 0) {
-                            IPicture pic = tagFile.Tag.Pictures[0];
-                            using (MemoryStream ms = new MemoryStream(pic.Data.Data)) {
-                                Image img = Image.FromStream(ms);
-                                thumbnail = img.GetThumbnailImage(ImageSize.Width, ImageSize.Height, null,
-                                    IntPtr.Zero);
-                            }
-                        }
-                    } catch (Exception) {
-                        // ignored
-                    }
-
-                    // Extract from image file
-                    if (item.FileImage == null) {
-                        try {
-                            using (Image img = Image.FromFile(filePath)) {
-                                thumbnail = img.GetThumbnailImage(ImageSize.Width, ImageSize.Height, null,
-                                    IntPtr.Zero);
-                            }
-                        } catch (Exception) {
-                            // ignored
-                        }
-                    }
-
-                    if (thumbnail != null) {
-                        item.FileImage = new Bitmap(thumbnail);
-                        thumbnail.Dispose();
-                    }
+                if (!item.IsImageLoaded) {
+                    OnDemandImageLoadStack.Push(e);
+                    ImageLoadTimer.Enabled = true;
                 }
 
-                item.drawItem(e, this);
+                item.DrawItem(e, this);
             }
+        }
+
+        public void ClearItems() {
+            OnDemandImageLoadStack.Clear();
+            Items.Clear();
         }
     }
 
@@ -70,32 +87,72 @@ namespace JapaneseToRomajiFilenameConverter.Gui {
         public string DirectoryName { get; set; }
         public string FileName { get; set; }
         public Image FileImage { get; set; }
-        public bool LoadedImage { get; set; } = false;
+        public bool IsImageLoaded { get; set; } = false;
 
+        private FileBox Container;
         private Font ExtensionFont;
         private StringFormat ExtensionAlignment;
         private string ExtensionString;
 
         private Font FileNameFont;
 
-        public FileBoxItem(ListBox listBox, string path) {
+        public FileBoxItem(FileBox fileBox, string path) {
             Alignment.Alignment = StringAlignment.Near;
             Alignment.LineAlignment = StringAlignment.Near;
 
+            Container = fileBox;
             DirectoryName = Path.GetDirectoryName(path);
             FileName = Path.GetFileName(path);
 
-            ExtensionFont = new Font(listBox.Font.FontFamily, 20, FontStyle.Bold);
+            ExtensionFont = new Font(fileBox.Font.FontFamily, 20, FontStyle.Bold);
             ExtensionAlignment = new StringFormat();
             ExtensionAlignment.Alignment = StringAlignment.Center;
             ExtensionAlignment.LineAlignment = StringAlignment.Center;
             ExtensionString = Path.GetExtension(FileName).TrimStart('.');
             ExtensionString = ExtensionString.Substring(0, Math.Min(ExtensionString.Length, 4)).ToUpper();
 
-            FileNameFont = new Font(listBox.Font, FontStyle.Bold);
+            FileNameFont = new Font(fileBox.Font, FontStyle.Bold);
         }
 
-        public void drawItem(DrawItemEventArgs e, FileBox box) {            
+        public void LoadImage(int width, int height) {
+            if (IsImageLoaded) return;
+            IsImageLoaded = true;
+
+            Image thumbnail = null;
+            string filePath = Path.Combine(DirectoryName, FileName);
+
+            // Extract from audio file
+            try {
+                TagLib.File tagFile = TagLib.File.Create(filePath);
+                if (tagFile.Tag.Pictures.Length > 0) {
+                    IPicture pic = tagFile.Tag.Pictures[0];
+                    using (MemoryStream ms = new MemoryStream(pic.Data.Data)) {
+                        Image img = Image.FromStream(ms);
+                        thumbnail = img.GetThumbnailImage(width, height, null, IntPtr.Zero);
+                    }
+                }
+            } catch (Exception) {
+                // ignored
+            }
+
+            // Extract from image file
+            if (FileImage == null) {
+                try {
+                    using (Image img = Image.FromFile(filePath)) {
+                        thumbnail = img.GetThumbnailImage(width, height, null, IntPtr.Zero);
+                    }
+                } catch (Exception) {
+                    // ignored
+                }
+            }
+
+            if (thumbnail != null) {
+                FileImage = new Bitmap(thumbnail);
+                thumbnail.Dispose();
+            }
+        }
+
+        public void DrawItem(DrawItemEventArgs e, FileBox box) {
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
                 e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(186, 229, 255)), e.Bounds);
             } else {
