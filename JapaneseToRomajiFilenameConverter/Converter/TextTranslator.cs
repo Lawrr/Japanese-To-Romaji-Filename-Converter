@@ -102,7 +102,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             return !text.Any(c => Unicode.IsJapanese(c.ToString()));
         }
 
-        public static string attachSuffixes(string text) {
+        public static string AttachSuffixes(string text) {
             foreach (string suffix in Suffixes) {
                 text = Regex.Replace(text,
                     @"\s" + suffix + @"\b",

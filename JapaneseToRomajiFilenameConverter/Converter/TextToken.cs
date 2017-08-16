@@ -268,7 +268,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     translatedText = TextTranslator.LowercaseParticles(translatedText, particles);
 
                     // Attach suffixes
-                    translatedText = TextTranslator.attachSuffixes(translatedText);
+                    translatedText = TextTranslator.AttachSuffixes(translatedText);
                     
                     // Trim and join
                     outText = Prefix + translatedText.Trim();
