@@ -12,7 +12,7 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
         public string Prefix { get; set; }
 
         public static Dictionary<string, string> PunctuationMap { get; } = new Dictionary<string, string>() {
-            { "、", "," },
+            { "、", ", " },
             { "“", "\"" },
             { "”", "\"" }
         };
