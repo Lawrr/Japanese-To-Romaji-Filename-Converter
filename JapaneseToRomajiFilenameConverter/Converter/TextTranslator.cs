@@ -111,5 +111,22 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
 
             return text;
         }
+
+        public static string FixYouon(string text) {
+            // Shi/chi: shi ~yu -> shu, etc
+            text = Regex.Replace(text, @"((?i)(?:s|c)(?-i)h)i ?~y([aou])", "$1$2");
+            // shi ~e -> she, etc
+            text = Regex.Replace(text, @"((?i)(?:s|c)(?-i)h)i ?~([e])", "$1$2");
+            // Non-shi/chi: ji ~yu -> jyu, etc
+            text = Regex.Replace(text, @"((?!(?i)(?:s|c)(?-i)h))i ?~(y[aou])", "$1$2");
+
+            // ri ~i -> ryi, etc
+            text = Regex.Replace(text, @"((?i)[knhmrgjbp](?-i))i ?~([ei])", "$1y$2");
+
+            // All others, e.g. vu ~o -> vo
+            text = Regex.Replace(text, @"[iu] ?~([aeiou])", "$1");
+
+            return text;
+        }
     }
 }

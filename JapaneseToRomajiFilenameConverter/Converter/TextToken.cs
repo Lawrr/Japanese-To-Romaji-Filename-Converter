@@ -257,6 +257,9 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             string outText = "";
             switch (Type) {
                 case TokenType.HiraganaKanji:
+                    outText = TextTranslator.FixYouon(translatedText);
+                    break;
+
                 case TokenType.Katakana:
                     // Maps
                     translatedText = TextTranslator.MapPhrases(translatedText, maps);
