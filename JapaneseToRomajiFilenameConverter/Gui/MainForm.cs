@@ -146,7 +146,7 @@ namespace JapaneseToRomajiFilenameConverter {
                         ct.ThrowIfCancellationRequested();
 
                         if (Directory.Exists(item)) {
-                            // if the item is a directory get the files within the directory 
+                            // if the item is a directory get the files within the directory
                             string[] directoryFiles = Directory.GetFiles(item, "*", SearchOption.AllDirectories);
                             foreach (string file in directoryFiles) {
                                 ct.ThrowIfCancellationRequested();
