@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using JapaneseToRomajiFilenameConverter.Gui;
-using TagLib;
 using File = System.IO.File;
 
 namespace JapaneseToRomajiFilenameConverter {
     public partial class MainForm : Form {
+
+        private CancellationTokenSource AddFilesCts;
 
         public MainForm() {
             InitializeComponent();
@@ -105,6 +106,7 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         private void ClearFiles() {
+            AddFilesCts.Cancel();
             FilesBox.Items.Clear();
             OnHasNoFiles();
 
@@ -127,61 +129,48 @@ namespace JapaneseToRomajiFilenameConverter {
         }
 
         private async void AddFiles(IEnumerable<string> items) {
+            AddFilesCts = new CancellationTokenSource();
             OnHasFiles();
+            AddFilesAsync(items, AddFilesCts.Token);
 
-            await Task.Run(() => {
-                foreach (string item in items) {
-                    if (Directory.Exists(item)) {
-                        // if the item is a directory get the files within the directory 
-                        string[] directoryFiles = Directory.GetFiles(item, "*", SearchOption.AllDirectories);
-                        foreach (string file in directoryFiles) {
-                            AddFile(file);
-                        }
-                    } else {
-                        AddFile(item);
-                    }
-                }
-            });
+            if (AddFilesCts.IsCancellationRequested) {
+                ClearFiles();
+            }
         }
 
-        private void AddFile(string filePath) {
-            if (!File.Exists(filePath) || FilesBox.Items.IndexOf(filePath) != -1) return;
-
-            // Extract image from file (if it has one)
-            Image fileImage = null;
-
-            // Extract from audio file
-            try {
-                TagLib.File tagFile = TagLib.File.Create(filePath);
-                if (tagFile.Tag.Pictures.Length > 0) {
-                    IPicture pic = tagFile.Tag.Pictures[0];
-                    using (MemoryStream ms = new MemoryStream(pic.Data.Data)) {
-                        fileImage = Image.FromStream(ms);
-                    }
-                }
-            } catch (Exception) {
-                // ignored
-            }
-
-            // Extract from image file
-            if (fileImage == null) {
+        private async void AddFilesAsync(IEnumerable<string> items, CancellationToken ct) {
+            await Task.Run(() => {
                 try {
-                    using (Image img = Image.FromFile(filePath)) {
-                        fileImage = new Bitmap(img);
+                    List<FileBoxItem> itemList = new List<FileBoxItem>();
+                    foreach (string item in items) {
+                        ct.ThrowIfCancellationRequested();
+
+                        if (Directory.Exists(item)) {
+                            // if the item is a directory get the files within the directory 
+                            string[] directoryFiles = Directory.GetFiles(item, "*", SearchOption.AllDirectories);
+                            foreach (string file in directoryFiles) {
+                                ct.ThrowIfCancellationRequested();
+
+                                if (!File.Exists(file) || FilesBox.Items.IndexOf(file) != -1) continue;
+                                FileBoxItem fbi = new FileBoxItem(FilesBox, file);
+                                itemList.Add(fbi);
+                            }
+                        } else {
+                            if (!File.Exists(item) || FilesBox.Items.IndexOf(item) != -1) continue;
+                            FileBoxItem fbi = new FileBoxItem(FilesBox, item);
+                            itemList.Add(fbi);
+                        }
                     }
-                } catch (Exception) {
+
+                    ct.ThrowIfCancellationRequested();
+                    this.InvokeSafe(() => {
+                        FilesBox.Items.AddRange(itemList.Cast<object>().ToArray());
+                        totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
+                    });
+                } catch (OperationCanceledException) {
                     // ignored
                 }
-            }
-
-            FileBoxItem item = new FileBoxItem(FilesBox, filePath,
-                fileImage?.GetThumbnailImage(FilesBox.ImageSize.Width, FilesBox.ImageSize.Height, null, IntPtr.Zero));
-
-            this.InvokeSafe(() => {
-                FilesBox.Items.Add(item);
-                totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
-            });
+            }, ct);
         }
-
     }
 }

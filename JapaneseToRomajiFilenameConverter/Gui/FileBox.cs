@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using TagLib;
 
 namespace JapaneseToRomajiFilenameConverter.Gui {
 
@@ -11,11 +12,52 @@ namespace JapaneseToRomajiFilenameConverter.Gui {
 
         public FileBox() {
             InitializeComponent();
+            DoubleBuffered = true;
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e) {
             if (Items.Count > 0) {
                 FileBoxItem item = (FileBoxItem)Items[e.Index];
+
+                if (!item.LoadedImage) {
+                    item.LoadedImage = true;
+
+                    Image thumbnail = null;
+                    string filePath = Path.Combine(item.DirectoryName, item.FileName);
+
+                    // Extract from audio file
+                    try {
+                        TagLib.File tagFile = TagLib.File.Create(filePath);
+                        if (tagFile.Tag.Pictures.Length > 0) {
+                            IPicture pic = tagFile.Tag.Pictures[0];
+                            using (MemoryStream ms = new MemoryStream(pic.Data.Data)) {
+                                Image img = Image.FromStream(ms);
+                                thumbnail = img.GetThumbnailImage(ImageSize.Width, ImageSize.Height, null,
+                                    IntPtr.Zero);
+                            }
+                        }
+                    } catch (Exception) {
+                        // ignored
+                    }
+
+                    // Extract from image file
+                    if (item.FileImage == null) {
+                        try {
+                            using (Image img = Image.FromFile(filePath)) {
+                                thumbnail = img.GetThumbnailImage(ImageSize.Width, ImageSize.Height, null,
+                                    IntPtr.Zero);
+                            }
+                        } catch (Exception) {
+                            // ignored
+                        }
+                    }
+
+                    if (thumbnail != null) {
+                        item.FileImage = new Bitmap(thumbnail);
+                        thumbnail.Dispose();
+                    }
+                }
+
                 item.drawItem(e, this);
             }
         }
@@ -25,9 +67,10 @@ namespace JapaneseToRomajiFilenameConverter.Gui {
 
         private StringFormat Alignment = new StringFormat();
 
-        private string DirectoryName;
-        private string FileName;
-        private Image FileImage;
+        public string DirectoryName { get; set; }
+        public string FileName { get; set; }
+        public Image FileImage { get; set; }
+        public bool LoadedImage { get; set; } = false;
 
         private Font ExtensionFont;
         private StringFormat ExtensionAlignment;
@@ -35,14 +78,12 @@ namespace JapaneseToRomajiFilenameConverter.Gui {
 
         private Font FileNameFont;
 
-        public FileBoxItem(ListBox listBox, string path, Image image) {
+        public FileBoxItem(ListBox listBox, string path) {
             Alignment.Alignment = StringAlignment.Near;
             Alignment.LineAlignment = StringAlignment.Near;
 
             DirectoryName = Path.GetDirectoryName(path);
             FileName = Path.GetFileName(path);
-
-            FileImage = image;
 
             ExtensionFont = new Font(listBox.Font.FontFamily, 20, FontStyle.Bold);
             ExtensionAlignment = new StringFormat();
