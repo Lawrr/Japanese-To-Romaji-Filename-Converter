@@ -39,6 +39,10 @@ namespace JapaneseToRomajiFilenameConverter {
             convertForm.Progress += new EventHandler<ProgressEventArgs>(Revert_Progress);
             convertForm.RevertFiles(ConversionsBox.SelectedItems.Cast<ConversionItem>().ToList());
             convertForm.ShowDialog();
+
+            if (ConversionsBox.Items.Count == 0) {
+                ClearBTN.Enabled = false;
+            }
         }
 
         private void ClearBTN_Click(object sender, EventArgs e) {
