@@ -122,6 +122,8 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
             text = Regex.Replace(text, @"((?i)(?:s|c)(?-i)h)i ?~([e])", "$1$2");
             // Non-shi/chi: ji ~yu -> jyu, etc
             text = Regex.Replace(text, @"((?!(?i)(?:s|c)(?-i)h))i ?~(y[aou])", "$1$2");
+            // Non-shi/chi unconventional: vu ~yu -> vyu, etc
+            text = Regex.Replace(text, @"((?!(?i)(?:s|c)(?-i)h))u ?~(y[aou])", "$1$2");
 
             // ri ~i -> ryi, etc
             text = Regex.Replace(text, @"((?i)[knhmrgjbp](?-i))i ?~([ei])", "$1y$2");
