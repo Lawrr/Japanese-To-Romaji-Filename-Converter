@@ -128,7 +128,7 @@ namespace JapaneseToRomajiFilenameConverter {
             totalFilesLabel.Text = "Total Files: " + FilesBox.Items.Count;
         }
 
-        private async void AddFiles(IEnumerable<string> items) {
+        private void AddFiles(IEnumerable<string> items) {
             AddFilesCts = new CancellationTokenSource();
             OnHasFiles();
             AddFilesAsync(items, AddFilesCts.Token);
