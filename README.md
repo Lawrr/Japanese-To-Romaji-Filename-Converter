@@ -1,61 +1,61 @@
 # Japanese to Romaji Filename Converter
-Works for any file with a japanese name (hiragana/kanji/katakana). Converts the filename into romaji with the help of Google Translator.
+![](https://puu.sh/xcvkz/01b4cef68b.png)
 
-Note: This overrides the selected files with the new converted filenames.
+Convert filenames with japanese characters (hiragana/kanji/katakana) into romaji/english.
 
-#### Metadata
-For audio files it also converts the metadata tags for:
-- Title
-- Contributing artists
-- Album artists
-- Album
+Hiragana and kanji characters are converted into romaji, while katakana is converted into the english words.
 
-## Current Features
-- Convert files from japanese to romaji (including metadata)
-- Revert files (and metadata) back to their original names after a conversion
-- Extendable mapping list for incorrect translations
-- Extendable particle list for non-capitalised phrases
+# [Download Here](https://github.com/Lawrr/Japanese-To-Romaji-Filename-Converter/releases)
+## Requirements
+- .NET Framework 4.5
 
-## Usage
-Note: Please unzip the folder before using it so that the conversion-history file can be written to permanently.
+# Current Features
+- **Convert filenames**: from japanese to romaji/english.
+- **Revert conversions**: ability to change filenames back after a conversion.
+- **Phrase mapping**: helps to correct incorrect translations.
+- **Particle list**: choose which words you want capitalised.
+- **Audio metadata support**: if the file is an audio file with ID3 metadata, this program also converts the title, artists, album artist and album information into romaji/english if it is in japanese.
 
-#### Getting Started
-1. Extract the zip file
+# Program Usage
+
+### Getting Started
+1. Extract/unzip the downloaded zip file (**Please unzip before using it so that the conversion-history file can be written to properly**)
 2. Run `Japanese to Romaji Filename Converter.exe`
 
-#### Converting
+### Converting
 1. Add some files to be converted
 2. Click `Convert`
 
-#### Reverting
+### Reverting
 1. Click `View Conversion History`
 2. Select files which you want converted back
 3. Click `Revert Selected`
 
-## Things To Know
-### Conversion History
+# Things To Know When Using The Program
+## Conversion History
 Whenever a conversion occurs, the conversion is saved in the `conversion-history.xml` file in the same directory as the program. The conversion data is saved in this file in case a file has to be reverted back.
 
-### Mappings
+## Mappings
 To ease the problem of incorrect translations, there are mapping files located in `res/maps/` which will map the specified phrases into another phrase. For example, if the phrase `tsu` continuously gets translated into `tsud`, you can create a new mapping `tsud:tsu` which will map `tsud` to `tsu` whenever a translation occurs.
 
-Currently there are two mapping files:
-- `hirakanji-latn_maps.txt`: Used whenever a token is translated from hiragana/kanji to romaji
-- `kata-en_maps.txt`: Used whenever a token is translated from katakana to english
+**Mappings support regular expressions.**
 
-### Particles
+Currently there are two mapping files:
+- `hirakanji-latn_maps.txt`: Used whenever a _token_ is translated from hiragana/kanji to romaji
+- `kata-en_maps.txt`: Used whenever a _token_ is translated from katakana to english
+
+## Particles
 `res/particles/` contains a list of language particles which do not get capitalised during conversion.
 
+**Particles support regular expressions.**
+
 Currently there are two particle files:
-- `hirakanji-latn_particles.txt`: list of japanese particles (romanized) which are checked when a token is translated from hiragana/kanji to romaji
-- `kata-en_particles.txt`: list of english particles which are checked when a token is translated from katakana to english
+- `hirakanji-latn_particles.txt`: list of japanese particles (romanized) which are checked when a _token_ is translated from hiragana/kanji to romaji
+- `kata-en_particles.txt`: list of english particles which are checked when a _token_ is translated from katakana to english
 
-## Runtime Dependencies
-- .NET Framework 4.5
-
-## Development Dependencies
+# Development Dependencies
 - HtmlAgilityPack
 - TagLib
 
-## Disclaimer
+# Disclaimer
 Please be aware that the software is not perfect and may make incorrect translations. Please use at your own risk.
