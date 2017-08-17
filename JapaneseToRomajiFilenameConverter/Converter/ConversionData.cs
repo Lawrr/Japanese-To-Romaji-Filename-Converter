@@ -12,10 +12,10 @@
         }
 
         public ConversionData(string filePath,
-                              string title,
-                              string album,
-                              string[] performers,
-                              string[] albumArtists) {
+                              string title=null,
+                              string album=null,
+                              string[] performers=null,
+                              string[] albumArtists=null) {
             FilePath = filePath;
             Title = title;
             Album = album;

@@ -70,7 +70,6 @@ namespace JapaneseToRomajiFilenameConverter {
         private void Revert_Progress(object sender, ProgressEventArgs e) {
             switch (e.Type) {
                 case ProgressEvent.Reverted:
-                case ProgressEvent.RevertFailed:
                     this.InvokeSafe(() => {
                         ConversionsBox.Items.Remove(e.Item);
                     });

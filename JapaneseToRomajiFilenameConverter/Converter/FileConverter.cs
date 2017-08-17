@@ -31,8 +31,15 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
         public void Convert(IEnumerable<string> files, CancellationToken ct) {
             // Convert each file
             foreach (string filePath in files) {
+                // Check if function has been cancelled if called asynchronously
+                if (ct != CancellationToken.None) {
+                    ct.ThrowIfCancellationRequested();
+                }
+
                 if (!File.Exists(filePath)) {
-                    // TODO Error
+                    ConversionData nonExistentData = new ConversionData(filePath);
+                    ConversionItem item = new ConversionItem(nonExistentData, null);
+                    OnProgressEvent(ProgressEvent.FileDoesNotExist, item);
                     continue;
                 }
 
@@ -83,6 +90,22 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     ct.ThrowIfCancellationRequested();
                 }
 
+                // Replace illegal filename characters from the new filename
+                foreach (string s in IllegalFilenameMap.Keys) {
+                    string sVal;
+                    if (IllegalFilenameMap.TryGetValue(s, out sVal)) {
+                        newFileName = newFileName.Replace(s, sVal);
+                    }
+                }
+
+                string newFilePath = directoryPath + Path.DirectorySeparatorChar + newFileName + extension;
+                if (File.Exists(newFilePath)) {
+                    ConversionData existingData = new ConversionData(newFilePath);
+                    ConversionItem item = new ConversionItem(oldData, existingData);
+                    OnProgressEvent(ProgressEvent.FileAlreadyExists, item);
+                    continue;
+                }
+
                 // Set new tags
                 if (tagFile != null) {
                     tagFile.Tag.Title = title;
@@ -92,17 +115,6 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     tagFile.Save();
                 }
 
-                // Replace illegal filename characters from the new filename
-                foreach (string s in IllegalFilenameMap.Keys) {
-                    string sVal;
-                    if (IllegalFilenameMap.TryGetValue(s, out sVal)) {
-                        newFileName = newFileName.Replace(s, sVal);
-                    }
-                }
-
-                // Move file to new path
-                string newFilePath = directoryPath + Path.DirectorySeparatorChar + newFileName + extension;
-                // TODO exception
                 File.Move(filePath, newFilePath);
 
                 // Store new conversion data
@@ -131,14 +143,19 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
 
         public void Revert(IEnumerable<ConversionItem> fileItems, CancellationToken ct) {
             foreach (ConversionItem item in fileItems) {
-                if (!File.Exists(item.NewData.FilePath)) {
-                    OnProgressEvent(ProgressEvent.RevertFailed, item);
-                    continue;
-                }
-
                 // Check if function has been cancelled if called asynchronously
                 if (ct != CancellationToken.None) {
                     ct.ThrowIfCancellationRequested();
+                }
+
+                if (!File.Exists(item.NewData.FilePath)) {
+                    OnProgressEvent(ProgressEvent.FileDoesNotExist, item);
+                    continue;
+                }
+                if (File.Exists(item.OldData.FilePath)) {
+                    ConversionItem reversedItem = new ConversionItem(item.NewData, item.OldData);
+                    OnProgressEvent(ProgressEvent.FileAlreadyExists, reversedItem);
+                    continue;
                 }
 
                 // Revert tags
@@ -157,7 +174,6 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     tagFile.Save();
                 }
 
-                // Revert filename
                 File.Move(item.NewData.FilePath, item.OldData.FilePath);
 
                 OnProgressEvent(ProgressEvent.Reverted, item);
@@ -173,8 +189,9 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
     public enum ProgressEvent {
         Converted,
         Reverted,
-        Completed,
-        RevertFailed
+        FileDoesNotExist,
+        FileAlreadyExists,
+        Completed
     }
 
     public class ProgressEventArgs : EventArgs {
