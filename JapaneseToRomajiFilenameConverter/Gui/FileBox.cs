@@ -21,7 +21,7 @@ namespace JapaneseToRomajiFilenameConverter.Gui {
             InitializeComponent();
             DoubleBuffered = true;
 
-            ImageLoadTimer = new Timer(10);
+            ImageLoadTimer = new Timer(30);
             ImageLoadTimer.Elapsed += new ElapsedEventHandler(LoadImage);
             ImageLoadTimer.Enabled = true;
         }
