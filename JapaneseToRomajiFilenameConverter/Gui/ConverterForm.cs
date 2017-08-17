@@ -92,7 +92,33 @@ namespace JapaneseToRomajiFilenameConverter {
                     ConvertedFiles++;
 
                     this.InvokeSafe(() => {
-                        ProgressBox.AppendText(string.Format("Converted: {0} to {1}{2}",
+                        ProgressBox.AppendText(string.Format("Converted:{3}\t{0}{3}\tFrom:\t{1}{3}\tTo:\t{2}{3}",
+                                                             Path.GetDirectoryName(e.Item.OldData.FilePath),
+                                                             Path.GetFileName(e.Item.OldData.FilePath),
+                                                             Path.GetFileName(e.Item.NewData.FilePath),
+                                                             Environment.NewLine));
+                        Text = $"Conversion Progress {ConvertedFiles}/{TotalFiles}";
+                    });
+                    break;
+
+                case ProgressEvent.FileDoesNotExist:
+                    ConvertedFiles++;
+
+                    this.InvokeSafe(() => {
+                        ProgressBox.AppendText(string.Format("FAIL - File does not exist{2}\t{0}{2}\tFile: {1}{2}",
+                                                             Path.GetDirectoryName(e.Item.OldData.FilePath),
+                                                             Path.GetFileName(e.Item.OldData.FilePath),
+                                                             Environment.NewLine));
+                        Text = $"Conversion Progress {ConvertedFiles}/{TotalFiles}";
+                    });
+                    break;
+
+                case ProgressEvent.FileAlreadyExists:
+                    ConvertedFiles++;
+
+                    this.InvokeSafe(() => {
+                        ProgressBox.AppendText(string.Format("FAIL - Cannot override existing file with the same name{3}\t{0}{3}\tOriginal:\t{1}{3}\tExisting:\t{2}{3}",
+                                                             Path.GetDirectoryName(e.Item.OldData.FilePath),
                                                              Path.GetFileName(e.Item.OldData.FilePath),
                                                              Path.GetFileName(e.Item.NewData.FilePath),
                                                              Environment.NewLine));
@@ -107,21 +133,8 @@ namespace JapaneseToRomajiFilenameConverter {
                     ConvertedFiles++;
 
                     this.InvokeSafe(() => {
-                        ProgressBox.AppendText(string.Format("Reverted: {0} to {1}{2}",
-                                                             Path.GetFileName(e.Item.NewData.FilePath),
-                                                             Path.GetFileName(e.Item.OldData.FilePath),
-                                                             Environment.NewLine));
-                        Text = $"Conversion Progress {ConvertedFiles}/{TotalFiles}";
-                    });
-                    break;
-
-                case ProgressEvent.RevertFailed:
-                    HistoryManager.RemoveConversion(e.Item);
-
-                    ConvertedFiles++;
-
-                    this.InvokeSafe(() => {
-                        ProgressBox.AppendText(string.Format("Failed: {0} to {1}{2}",
+                        ProgressBox.AppendText(string.Format("Reverted:{3}\t{0}{3}\tFrom:\t{1}{3}\tTo:\t{2}{3}",
+                                                             Path.GetDirectoryName(e.Item.OldData.FilePath),
                                                              Path.GetFileName(e.Item.NewData.FilePath),
                                                              Path.GetFileName(e.Item.OldData.FilePath),
                                                              Environment.NewLine));
