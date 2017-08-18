@@ -1,7 +1,7 @@
 # Japanese to Romaji Filename Converter
 ![](https://puu.sh/xcvkz/01b4cef68b.png)
 
-Convert filenames with japanese characters (hiragana/kanji/katakana) into romaji/english.
+Convert filenames with japanese characters (hiragana/kanji/katakana) into romaji/english - with the help of Google Translate.
 
 Hiragana and kanji characters are converted into romaji, while katakana is converted into the english words.
 
