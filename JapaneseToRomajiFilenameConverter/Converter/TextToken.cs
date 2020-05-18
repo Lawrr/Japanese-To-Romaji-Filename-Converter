@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -227,8 +228,20 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     // Get phoentic text
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
-                    string phoneticText = WebUtility.HtmlDecode(doc.GetElementbyId("src-translit").InnerText);
-                    translation = FormatTranslation(phoneticText, maps, particles);
+                    var webClient = new WebClient { Encoding = System.Text.Encoding.UTF8 };
+                    var result = webClient.DownloadString(url);
+                    try
+                    {
+                        result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+                        string phoneticText = result;
+                        Console.WriteLine(phoneticText);
+                        translation = FormatTranslation(phoneticText, maps, particles);
+                        break;
+                    }
+                    catch
+                    {
+                        return "Error";
+                    }
                     break;
                 }
 
@@ -236,8 +249,19 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
                     // Get translated text
                     string url = TextTranslator.GetTranslatorUrl(Text, languagePair);
                     HtmlDocument doc = new HtmlWeb().Load(url);
-                    string translatedText = WebUtility.HtmlDecode(doc.GetElementbyId("result_box").InnerText);
-                    translation = FormatTranslation(translatedText, maps, particles);
+                    var webClient = new WebClient { Encoding = System.Text.Encoding.UTF8 };
+                    var result = webClient.DownloadString(url);
+                    try
+                    {
+                        result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+                        string translatedText = result;
+                        translation = FormatTranslation(translatedText, maps, particles);
+                        break;
+                    }
+                    catch
+                    {
+                        return "Error";
+                    }
                     break;
                 }
 
