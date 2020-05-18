@@ -9,7 +9,8 @@ namespace JapaneseToRomajiFilenameConverter.Converter {
 
         public const string LanguagePair = "ja|en";
 
-        private const string TranslatorUrl = "https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}";
+        //private const string TranslatorUrl = "https://www.google.com/translate_t?hl=en&ie=UTF8&text={0}&langpair={1}";
+        private const string TranslatorUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=en&dt=t&q={0}";
 
         private static char MapSplitChar = ':';
 
